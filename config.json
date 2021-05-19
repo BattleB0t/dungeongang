@@ -1,0 +1,14 @@
+{
+    "minecraft": {
+        "apiKey": "c3028f56-12b5-41d6-a969-c3cf8a6924da"
+    },
+    "discord": {
+        "bot_token": "ODM4MjkyNjYwMDUyOTUxMDUx.YI4-4A.6tIsM2e-3GJfoekWPjjbnCOq2-M",
+        "poll_channel": "823378296787566672",
+        "poll_prefix": "p!",
+        "bot_prefix": "-",
+        "blacklist_role": "838834296084889620",
+        "poll_creation_role": "808811038266490890",
+        "staff_role": "824228004137402388"
+    }
+}
