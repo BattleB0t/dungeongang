@@ -1,20 +1,24 @@
+//---------- VARIABLES ----------
 const Discord = require('discord.js')
 const axios = require('axios')
 const client = new Discord.Client({ partials: ['USER', 'MESSAGE', 'REACTION'] })
 const polledUsers = require('./polled_users.json')
 const config = require('./config.json')
+const apiFunctions = require('./functions/apiFunctions.js')
+const miscFunctions = require('./functions/miscFunctions.js')
+const PPREFIX = config.discord.poll_prefix
+const DPREFIX = config.discord.bot_prefix
+//---------- POLL COMMANDS ----------
 const polls = require('./commands/poll.js')
 const endpoll = require('./commands/endpoll.js')
 const help = require('./commands/help.js')
 const check = require('./commands/check.js')
+//---------- BOT COMMANDS ----------
 const check2 = require('./commands/bot/check.js')
 const votedout = require('./commands/bot/votedout.js')
 const clown = require('./commands/bot/clown.js')
-const apiFunctions = require('./functions/apiFunctions.js')
-const miscFunctions = require('./functions/miscFunctions.js')
 const updateUser = require('./commands/bot/updateUser.js')
-const PPREFIX = config.discord.poll_prefix
-const DPREFIX = config.discord.bot_prefix
+const botCalc = require('./commands/bot/calc.js')
 const fs = require('fs')
 client.on('ready', async () => {
     console.log(`Starting Poll Bot v1.0.0`);
