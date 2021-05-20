@@ -1,9 +1,12 @@
 let methods = {}
 
 const Discord = require('discord.js')
-
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 methods.updateUser = async function (message, tag, args, config, fs) {
     return;
+    message.delete()
     let username
     let originalMessage = message
     if (!args[1]) {
@@ -80,8 +83,9 @@ methods.updateUser = async function (message, tag, args, config, fs) {
                 await originalMessage.member.setNickname(`❮${cataLevel}❯ ${username} ${DiscordEmoji}`)
             } catch (e) { console.log(e) }
             // console.log(`❮${cataLevel}❯ ${username} ${DiscordEmoji}`)
-            return message.edit(createSuccessEmbed(`Updated <@${originalMessage.member.id}> to catacombs level ${cataLevel}!`));
-
+            message.edit(createSuccessEmbed(`Updated <@${originalMessage.member.id}> to catacombs level ${cataLevel}!`));
+            await sleep(15000)
+            return message.delete()
         })
 }
 
