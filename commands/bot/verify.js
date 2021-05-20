@@ -29,7 +29,8 @@ methods.verify = async function(message, args, config, fs){
                 "slots": [
                     {
                        "slot_id": 1,
-                       "emote": "none" 
+                       "emote": "none", 
+                       "type": "free"
                     }
                 ]
             }
