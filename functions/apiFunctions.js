@@ -1,4 +1,5 @@
 const axios = require('axios')
+const { GuildMemberRoleManager } = require('discord.js')
 const config = require('../config.json')
 
 global.handleSenitherError = function HandleError(error, username){
@@ -174,3 +175,8 @@ global.findStats = async function findStats(uuid){
       }
       return json
   }
+
+global.getDiscordFromPlayer = async function(uuid) {
+    let response = await axios.get(`https://api.hypixel.net/player?key=${config.minecraft.apiKey}&uuid=${uuid}`);
+    return response?.data?.player?.socialMedia?.links?.DISCORD || "Player does not have a linked discord"
+}
