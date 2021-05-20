@@ -62,6 +62,9 @@ client.on('message', async message =>{
            case "uupdate":
                 await updateUser.data.updateUser(message, message.member.user.tag, args, config, fs)
                 break;
+           case "calc":
+                await botCalc.data.calc(message, args)
+                break;
         }
     }
 })
