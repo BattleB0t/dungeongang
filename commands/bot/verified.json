@@ -1,0 +1,17 @@
+{
+    "user_ids": [],
+    "users": {
+        "[message.author.id]": {
+            "uuid": "uuid",
+            "emotes": {
+                "unlocked_emotes": [],
+                "slots": [
+                    {
+                       "slot_id": 1,
+                       "emote": "none" 
+                    }
+                ]
+            }
+        }
+    }
+}
