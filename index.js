@@ -12,6 +12,7 @@ const votedout = require('./commands/bot/votedout.js')
 const clown = require('./commands/bot/clown.js')
 const apiFunctions = require('./functions/apiFunctions.js')
 const miscFunctions = require('./functions/miscFunctions.js')
+const updateUser = require('./commands/bot/updateUser.js')
 const PPREFIX = config.discord.poll_prefix
 const DPREFIX = config.discord.bot_prefix
 const fs = require('fs')
@@ -58,7 +59,7 @@ client.on('message', async message =>{
             case "votedout":
                 await votedout.data.votedout(message, args, config, fs)
                 break;
-           case "update":
+           case "uupdate":
                 await updateUser.data.updateUser(message, message.member.user.tag, args, config, fs)
                 break;
         }

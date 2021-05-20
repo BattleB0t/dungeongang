@@ -5,7 +5,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 methods.updateUser = async function (message, tag, args, config, fs) {
-    return;
+    // return;
     message.delete()
     let username
     let originalMessage = message
@@ -52,9 +52,15 @@ methods.updateUser = async function (message, tag, args, config, fs) {
             if (originalMessage.member.roles.cache.find(role => role.id === config.discord.tpPlus_role)) {
                 if (originalMessage.member.roles.cache.find(role => role.id === config.discord.subFour_role)) {
                     if (!DiscordEmoji.includes("⭐")) {
+                        if (DiscordEmoji.includes("★")) {
+                            DiscordEmoji = DiscordEmoji.substring(0, DiscordEmoji.indexOf("★")) + DiscordEmoji.substring(DiscordEmoji.indexOf("★") + 2)
+                        }
                         DiscordEmoji = "⭐ " + DiscordEmoji
                     }
                 } else if (!DiscordEmoji.includes("★")) {
+                    if (DiscordEmoji.includes("⭐")) {
+                        DiscordEmoji = DiscordEmoji.substring(0, DiscordEmoji.indexOf("⭐")) + DiscordEmoji.substring(DiscordEmoji.indexOf("⭐") + 2)
+                    }
                     DiscordEmoji = "★ " + DiscordEmoji
                 }
             } else {
@@ -67,18 +73,7 @@ methods.updateUser = async function (message, tag, args, config, fs) {
             }
             // let discordCollection = new Discord.Collection()
             // discordCollection.concat
-            originalMessage.member.removeAllCataRoles()
-            if (cataLevel > 29) {
-                if (cataLevel < 35) {
-                    originalMessage.member.roles.add(config.discord.cata_roles["30+"])
-                } else {
-                    if (originalMessage.member.roles.cache.find(role => role.id === config.discord.normalTp_role) && cataLevel > 37) {
-                        originalMessage.member.roles.add(config.discord.cata_roles[cataLevel.toString()])
-                    } else {
-                        originalMessage.member.roles.add(config.discord.cata_roles["35+"])
-                    }
-                }
-            }
+            originalMessage.member.giveCorrectCataRole(cataLevel)
             try {
                 await originalMessage.member.setNickname(`❮${cataLevel}❯ ${username} ${DiscordEmoji}`)
             } catch (e) { console.log(e) }

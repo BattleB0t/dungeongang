@@ -231,7 +231,18 @@ function getIndex(uuid) {
   }
 }
 
-Discord.GuildMember.prototype.removeAllCataRoles = async function () {
+Discord.GuildMember.prototype.giveCorrectCataRole = async function (cataLevel) {
   let ObjectValues = Object.values(config.discord.cata_roles)
-  this.roles.remove(this.roles.cache.filter(role => ObjectValues.includes(role.id)))
+  await this.roles.remove(this.roles.cache.filter(role => ObjectValues.includes(role.id)))
+  if (cataLevel > 29) {
+    if (cataLevel < 35) {
+      this.roles.add(config.discord.cata_roles["30+"])
+    } else {
+      if (this.roles.cache.find(role => role.id === config.discord.normalTp_role) && cataLevel > 37) {
+        this.roles.add(config.discord.cata_roles[cataLevel.toString()])
+      } else {
+        this.roles.add(config.discord.cata_roles["35+"])
+      }
+    }
+  }
 }
