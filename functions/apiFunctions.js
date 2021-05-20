@@ -178,3 +178,8 @@ global.getDiscordFromPlayer = async function(uuid) {
     let response = await axios.get(`https://api.hypixel.net/player?key=${config.minecraft.apiKey}&uuid=${uuid}`);
     return response?.data?.player?.socialMedia?.links?.DISCORD || "Player does not have a linked discord"
 }
+
+global.getPureHypixelResponse = async function (uuid) {
+    let response = await axios.get(`https://api.hypixel.net/skyblock/profiles?key=${config.minecraft.apiKey}&uuid=${uuid}`)
+    return response.data
+}
