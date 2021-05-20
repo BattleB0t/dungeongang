@@ -58,6 +58,9 @@ client.on('message', async message =>{
             case "votedout":
                 await votedout.data.votedout(message, args, config, fs)
                 break;
+           case "update":
+                await updateUser.data.updateUser(message, message.member.user.tag, args, config, fs)
+                break;
         }
     }
 })
