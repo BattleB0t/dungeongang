@@ -4,6 +4,7 @@ module.exports = class extends Client {
     constructor(config) {
         super({
             disabledEvents: ['TYPING_START'],
+            partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
         });
 
         this.commands = new Collection();
