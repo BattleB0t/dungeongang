@@ -12,7 +12,7 @@ module.exports = {
         }
         if (!args[1]) {
             try {
-                username = message.mentions.members.first().displayName;
+                username = message.member.displayName
                 username = username.split(" ")[1]
                 username = username.replace(/\W/g, '');
             } catch (error) {
