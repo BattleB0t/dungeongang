@@ -126,14 +126,15 @@ global.getCataAndPb = async function (uuid) {
     return dataJSON
 }
 
-global.getSecretCountAndCata = async function(uuid) {
+global.getSecretCountCataDiscord = async function(uuid) {
     let response = await HypixelApiRequest(`https://api.hypixel.net/player?key=${config.minecraft.apiKey}&uuid=${uuid}`)
     if (response === "Api throttle") { return response; }
     response = response.data
 
     return {
         "secretCount": response?.player?.achievements?.skyblock_treasure_hunter || 0,
-        "cata": (response?.player?.achievements?.skyblock_dungeoneer || 0)-1
+        "cata": (response?.player?.achievements?.skyblock_dungeoneer || 0)-1,
+        "discord": response?.player?.socialMedia?.links?.DISCORD || "Player does not have a linked discord"
     }
 }
 

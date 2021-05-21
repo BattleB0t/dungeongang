@@ -32,18 +32,18 @@ module.exports = {
                 if (uuid == 'invalid player') {
                     return message.editError('This player does not exist!')
                 }
-                let data = await findStats(uuid)
-                if (data[0] == 'error') {
-                    data.shift()
-                    return message.editError(data.toString())
-                }
-                let linkedDiscord = await getDiscordFromPlayer(uuid)
+                let data = await getSecretCountCataDiscord(uuid)
+                    .catch(error => {
+                        let errorMessage = error?.data?.cause || error.cause
+                        return message.edit(createErrorEmbed(errorMessage))
+                    })
+                let linkedDiscord = data.discord
                 if (linkedDiscord == "Player does not have a linked discord") {
                     return message.editError('You must link your discord in hypixel!')
                 } else if (linkedDiscord != tag) {
                     return message.editError('That minecraft account is connected to a different discord!')
                 }
-                let cataLevel = Math.floor(data.catacombs)
+                let cataLevel = data.cata
                 originalMessage.member.giveCorrectCataRole(cataLevel)
                 if (verified.user_ids.includes(originalMessage.member.id)) {
                     message.edit(createSuccessEmbed('You are already verified, giving member role...'))

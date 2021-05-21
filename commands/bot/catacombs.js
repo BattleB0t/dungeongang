@@ -50,7 +50,7 @@ module.exports = {
                         let errorMessage = error?.data?.cause || error.cause
                         return message.edit(createErrorEmbed(errorMessage))
                     })
-                let secrets = getSecretCountAndCata(uuid)
+                let secrets = getSecretCountCataDiscord(uuid)
                     .catch(error => {
                         let errorMessage = error?.data?.cause || error.cause
                         return message.edit(createErrorEmbed(errorMessage))
