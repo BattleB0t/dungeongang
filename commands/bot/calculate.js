@@ -100,6 +100,10 @@ module.exports = {
             )
                 .then(async newMessage => {
                     let response = await getPureHypixelResponse(uuid)
+                        .catch(error => {
+                            let errorMessage = error?.data?.cause || error.cause
+                            return message.edit(createErrorEmbed(errorMessage))
+                        })
                     if (response === "Api throttle") { return message.edit(createErrorEmbed("Api throttle")) }
                     let cataXp = -1;
 
