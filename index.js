@@ -19,10 +19,9 @@ for (const folder of commandFolders) {
     }
 }
 
-console.log(client.commands);
-
 client.on('ready', async () => {
-    console.log(`Starting Poll Bot v1.0.0`);
+    console.log(client.commands);
+    console.log(`Starting Dungeon Gang Bot v1.0.0`);
     client.user.setActivity(`Nice PB Kid`, {
         type: 'PLAYING'
     }).catch(console.error);
@@ -35,13 +34,10 @@ client.on('message', async (message) => {
     const cmdargs = message.content.slice(prefix.length).split(/ +/);
     const commandName = cmdargs.shift().toLowerCase();
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
     if (!message.guild) return;
     if (message.author.bot) return;
     if (!message.content.startsWith(prefix)) return;
-
-
-    if(command == 'help'){
+    if (command == 'help'){
         command.execute(message, cmdargs, config, fs)
     }else{
         let args = message.content.substring(prefix.length).split(" ");
