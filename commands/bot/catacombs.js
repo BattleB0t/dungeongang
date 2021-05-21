@@ -6,12 +6,18 @@ module.exports = {
     usage: 'check [username]',
     description: 'Command to check if a player meets top player/top player+ requirements',
     async execute(message, args, config, fs) {
-        var username;
+        let username;
         if (!message.member.roles.cache.has(config.discord.staff_role)) {
             return message.channel.send(createErrorEmbed('This command is not available to non-staff yet!'))
         }
         if (!args[1]) {
-            return message.channel.send(createErrorEmbed('No username provided.'))
+            try {
+                username = message.mentions.members.first().displayName;
+                username = username.split(" ")[1]
+                username = username.replace(/\W/g, '');
+            } catch (error) {
+                return message.channel.send(createErrorEmbed('An error has occurred while getting this user\'s username'))
+            }
         } else if (message.mentions.members.first()) {
             try {
                 username = message.mentions.members.first().displayName;
@@ -20,7 +26,6 @@ module.exports = {
             } catch (error) {
                 return message.channel.send(createErrorEmbed('An error has occurred while getting this user\'s username'))
             }
-
         } else {
             username = args[1];
         }
