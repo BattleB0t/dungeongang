@@ -37,39 +37,47 @@ module.exports = {
             .then(async message => {
                 let votedList = JSON.parse(fs.readFileSync('./data/votedout.json'))
                 let clownList = JSON.parse(fs.readFileSync('./data/clowns.json'))
-                if (await getUUID(username) == 'invalid player') {
+                let uuid = await getUUID(username)
+                if (uuid == 'invalid player') {
                     return message.edit(createErrorEmbed('This player does not exist!'))
                 }
-                let uuid = await getUUID(username)
-                if (await getIGN(uuid) == 'invalid uuid') {
+                let IGN = await getIGN(uuid)
+                if (IGN == 'invalid uuid') {
                     return message.edit(createErrorEmbed('An error has occurred while making the poll, please try again later.'))
                 }
-                let IGN = await getIGN(uuid)
-                let data = await findStats(uuid)
-                if (data === "Api throttle") { return message.edit(createErrorEmbed("Api throttle")) }
-                if (data[0] == 'error') {
-                    data.shift()
-                    return message.edit(createErrorEmbed(data.toString()))
-                }
-                let master = await getMaster(data.profileID, uuid)
-                if (master == 'No PB Found') master.masterPB = 'No PB Found'
+                let data = await getCataAndPb(uuid)
+                    .catch(error => {
+                        let errorMessage = error?.data?.cause || error.cause
+                        return message.edit(createErrorEmbed(errorMessage))
+                    })
+                let secrets = getSecretCountAndCata(uuid)
+                    .catch(error => {
+                        let errorMessage = error?.data?.cause || error.cause
+                        return message.edit(createErrorEmbed(errorMessage))
+                    })
+                if (data === "Api throttle") { return message.edit(createErrorEmbed("API Throttle: Please try again later.")) }
+                if (secrets === "Api throttle") { return message.edit(createErrorEmbed("API Throttle: Please try again later.")) }
+                let catacombs = data.cataLevel
+                let master6 = data['M6']['S+']
+                let floor7 = data['F7']['S+']
+                let secrets = secrets.secretCount
                 let voted = false
                 let clown = '<:no:838802013541498890>'
                 let tp = '<:no:838802013541498890>'
                 let tpp = '<:no:838802013541498890>'
                 if (votedList.users.includes(uuid)) voted = true
                 if (clownList.users.includes(uuid)) clown = '<:yes:838801988241588304>'
-                if (!isNaN(data.catacombs)) {
-                    if (data.catacombs >= 38 && data.secretsFound >= 12000 && data.fastestTimeMS <= 285000) {
+                if (!isNaN(catacombs)) {
+                    if (catacombs >= 38 && secrets >= 12000 && floor7 <= 285000) {
                         tp = '<:yes:838801988241588304>'
                     }
                 }
-                if (!isNaN(data.catacombs)) {
-                    if (data.catacombs >= 42 && data.secretsFound >= 20000 && voted == false) {
-                        if (data.fastestTimeMS <= 250000) {
+                if (!isNaN(catacombs)) {
+                    if (catacombs >= 42 && secrets >= 20000 && voted == false) {
+                        if (floor7 <= 250000) {
                             tpp = '<:yes:838801988241588304>'
                         }
-                        if (master.masterPBSeconds <= 240000) {
+                        if (master6 <= 240000) {
                             tpp = '<:yes:838801988241588304>'
                         }
                         if (tpp == '<:yes:838801988241588304>' && tp == '<:no:838802013541498890>') {
@@ -87,19 +95,19 @@ module.exports = {
                     "fields": [
                         {
                             "name": "**Catacombs Level**",
-                            "value": `${data.catacombs}`
+                            "value": `${catacombs}`
                         },
                         {
                             "name": "**Secrets**",
-                            "value": `${data.secretsFound}`
+                            "value": `${secrets}`
                         },
                         {
                             "name": "**Floor 7 S+ PB**",
-                            "value": `${data.fastestTime}`
+                            "value": `${fmtMStoMSS(floor7)}`
                         },
                         {
                             "name": "**Master 6 S+ PB**",
-                            "value": `${master.masterPB}`
+                            "value": `${fmtMStoMSS(master6)}`
                         },
                         {
                             "name": "**Voted-Out**",

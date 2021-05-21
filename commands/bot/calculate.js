@@ -104,7 +104,7 @@ module.exports = {
                             let errorMessage = error?.data?.cause || error.cause
                             return message.edit(createErrorEmbed(errorMessage))
                         })
-                    if (response === "Api throttle") { return message.edit(createErrorEmbed("Api throttle")) }
+                    if (response === "Api throttle") { return message.edit(createErrorEmbed("API Throttle: Please try again later.")) }
                     let cataXp = -1;
 
                     for (let i = 0; i < response.profiles.length; i++) {
