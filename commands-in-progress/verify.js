@@ -80,6 +80,7 @@ module.exports = {
                     }
                   }
                 verified.users.push(verifiedJson)
+                fs.writeFileSync('./data/verified.json', JSON.stringify(verified, null, 2))
                 message.edit(createSuccessEmbed(`Verified as **${username}** with catacombs level **${cataLevel}**!`));
                 await sleep(15000)
                 return message.delete()
