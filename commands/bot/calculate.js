@@ -67,10 +67,10 @@ module.exports = {
             args[1] = parseInt(args[1])
             args[2] = parseInt(args[2])
             if (Number.isNaN(args[1]) || Number.isNaN(args[2])) {
-                return message.channel.sendError(`<@${message.member.id}> Please provide existing catacombs levels`)
+                return message.channel.send(createErrorEmbed(`<@${message.member.id}> Please provide existing catacombs levels`))
             }
             if (args[1] > 50 || args[1] < 0 || args[2] > 50 || args[2] < 0) {
-                return message.channel.sendError(`<@${message.member.id}> Please provide existing catacombs levels`)
+                return message.channel.send(createErrorEmbed(`<@${message.member.id}> Please provide existing catacombs levels`))
             }
             if (args[1] > args[2]) {
                 let temp = args[1]
@@ -83,10 +83,10 @@ module.exports = {
         } else if (args.length === 2) {
             args[1] = parseInt(args[1])
             if (Number.isNaN(args[1])) {
-                return message.channel.sendError(`<@${message.member.id}> Please provide existing catacombs levels`)
+                return message.channel.send(createErrorEmbed(`<@${message.member.id}> Please provide existing catacombs levels`))
             }
             if (args[1] > 50 || args[1] < 0) {
-                return message.channel.sendError(`<@${message.member.id}> Please provide existing catacombs levels`)
+                return message.channel.send(createErrorEmbed(`<@${message.member.id}> Please provide existing catacombs levels`))
             }
             let username = message.member.displayName;
             username = username.split(" ")[1]
@@ -100,8 +100,9 @@ module.exports = {
             )
                 .then(async newMessage => {
                     let response = await getPureHypixelResponse(uuid)
+                    if (response === "Api throttle") { return message.edit(createErrorEmbed("Api throttle")) }
                     let cataXp = -1;
-    
+
                     for (let i = 0; i < response.profiles.length; i++) {
                         if (response?.profiles[i]?.members[uuid]?.dungeons || false) {
                             if (response.profiles[i].members[uuid].dungeons.dungeon_types.catacombs.experience > cataXp) {
@@ -111,16 +112,16 @@ module.exports = {
                     };
                     cataXp = Math.floor(cataXp)
                     collectiveXp = dungeoneering_xp[args[1]] - cataXp
-    
+
                     if (collectiveXp < 0) {
-                        return newMessage.sendError(`<@${message.member.id}> You have already reached this catacombs level!`)
+                        return newMessage.edit(`<@${message.member.id}> You have already reached this catacombs level!`)
                     }
                     collectiveXp = numberWithCommas(collectiveXp)
-    
+
                     return newMessage.edit(createSuccessEmbed(`<@${message.member.id}> It will take you ${collectiveXp} catacombs xp to reach level ${args[1]}`))
                 })
         } else {
-            return message.channel.sendError(`<@${message.member.id}> Please provide at least one catacombs level`)
+            return message.channel.send(createErrorEmbed(`<@${message.member.id}> Please provide at least one catacombs level`))
         }
     },
 };
