@@ -8,17 +8,17 @@ module.exports = {
     async execute(message, args, config, fs) {
         var username;
         if(!message.member.roles.cache.has(config.discord.staff_role)){
-            return message.channel.sendError('You do not have permission to use this command!')
+            return message.channel.send('You do not have permission to use this command!')
         }
         if(!args[1]){
-            return message.channel.sendError('No username provided.')
+            return message.channel.send('No username provided.')
         }else if(message.mentions.members.first()){
             try{
                 username = message.mentions.members.first().displayName;
                 username = username.split(" ")[1]
                 username = username.replace(/\W/g, '');
             }catch(error){
-                return message.channel.sendError('An error has occurred while getting this user\'s username')
+                return message.channel.send('An error has occurred while getting this user\'s username')
             }
         }else{ 
             username = args[1];
@@ -40,10 +40,10 @@ module.exports = {
             }
             let IGN = await getIGN(uuid)
             let data = await findStats(uuid)
-            if (data === "Api throttle") { return message.editError("Api throttle") }
+            if (data === "Api throttle") { return message.edit("Api throttle") }
             if(data[0] == 'error'){
                 data.shift()
-                return message.editError(data.toString())
+                return message.edit(data.toString())
             }
             let master = await getMaster(data.profileID, uuid)
             if(master == 'No PB Found') master.masterPB = 'No PB Found'
