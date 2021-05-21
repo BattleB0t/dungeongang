@@ -79,7 +79,7 @@ module.exports = {
             }
             let sum = dungeoneering_xp[args[2]] - dungeoneering_xp[args[1]]
             sum = numberWithCommas(sum)
-            return message.channel.send(createSuccessEmbed(`It will take ${sum} catacombs xp to get from level ${args[1]} to level ${args[2]}`))
+            return message.channel.send(createSuccessEmbed(`It will take **${sum}** catacombs xp to get from level **${args[1]}** to level **${args[2]}**`))
         } else if (args.length === 2) {
             args[1] = parseInt(args[1])
             if (Number.isNaN(args[1])) {
@@ -118,7 +118,7 @@ module.exports = {
                     }
                     collectiveXp = numberWithCommas(collectiveXp)
 
-                    return newMessage.edit(createSuccessEmbed(`It will take you ${collectiveXp} catacombs xp to reach level ${args[1]}`))
+                    return newMessage.edit(createSuccessEmbed(`It will take you **${collectiveXp}** catacombs xp to reach level **${args[1]}**`))
                 })
         } else {
             return message.channel.send(createErrorEmbed(`Please provide at least one catacombs level`))
