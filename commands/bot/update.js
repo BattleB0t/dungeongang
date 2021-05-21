@@ -82,10 +82,20 @@ module.exports = {
                 // let discordCollection = new Discord.Collection()
                 // discordCollection.concat
                 originalMessage.member.giveCorrectCataRole(cataLevel)
+                let changeIntoName = `❮${cataLevel}❯ ${username} ${DiscordEmoji}`
+                if (originalMessage.member.roles.cache.find(role => role.id === config.discord.staff_role)) {
+                    Object.keys(config.discord.staff_ranks).forEach(rank => {
+                        if (originalMessage.member.roles.cache.has(rank)) {
+                            // console.log(1)
+                            changeIntoName = changeIntoName.replace(/[❮❯]/g, config.discord.staff_ranks[rank])
+                        }
+                    })
+                }
                 try {
-                    await originalMessage.member.setNickname(`❮${cataLevel}❯ ${username} ${DiscordEmoji}`)
+                    await originalMessage.member.setNickname(changeIntoName)
                 } catch (e) { console.log(e) }
-                // console.log(`❮${cataLevel}❯ ${username} ${DiscordEmoji}`)
+                
+                // console.log(changeIntoName)
                 message.edit(createSuccessEmbed(`Updated <@${originalMessage.member.id}> to catacombs level ${cataLevel}!`));
                 await sleep(15000)
                 return message.delete()
