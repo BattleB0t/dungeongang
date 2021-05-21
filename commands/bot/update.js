@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'uupdate',
     aliases: [],
-    usage: 'update (username)',
+    usage: 'update [username]',
     description: 'Updates your catacombs level and emotes',
     async execute(message, args, config, fs) {
         message.delete()

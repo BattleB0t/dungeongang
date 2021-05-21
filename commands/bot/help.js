@@ -11,7 +11,7 @@ module.exports = {
     usage: 'help [command]',
     description: 'Gets information about the bot',
     execute(message, args, config, fs) {
-        console.log(args)
+        // console.log(args)
         if (args.length === 1) {
             const commandFolders = fs.readdirSync('./commands');
 
@@ -28,7 +28,7 @@ module.exports = {
                 for (const file of commandFiles) {
                     const command = require(`../${folder}/${file}`);
                     let currentCommand = [];
-                    currentCommand.push(`\`${command.name.charAt(0).toUpperCase() + command.name.slice(1)}\``);
+                    currentCommand.push(`\`${command.name}\``);
                     currentCommand.push('-');
                     currentCommand.push(command.description);
                     descriptions.push(currentCommand.join(' '));
@@ -66,7 +66,7 @@ module.exports = {
         }
 
         let embed = new Discord.MessageEmbed()
-            .setAuthor(`Help - ${command.name.charAt(0).toUpperCase() + command.name.slice(1)}`, message.client.user.avatarURL())
+            .setAuthor(`Help - ${command.name}`, message.client.user.avatarURL())
             .setColor('0x00bfff')
 
         var desc = [`*${command.description}*`, `Usage: \`${command.usage}\``];

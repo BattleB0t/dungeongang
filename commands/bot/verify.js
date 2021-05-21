@@ -46,7 +46,7 @@ module.exports = {
                 let cataLevel = Math.floor(data.catacombs)
                 originalMessage.member.giveCorrectCataRole(cataLevel)
                 if (verified.user_ids.includes(originalMessage.member.id)) {
-                    message.channel.send(createSuccessEmbed('You are already verified, giving member role...'))
+                    message.edit(createSuccessEmbed('You are already verified, giving member role...'))
                     try {
                         await originalMessage.member.setNickname(`❮${cataLevel}❯ ${username}`)
                     } catch (e) { console.log(e) }

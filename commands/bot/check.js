@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'check',
     aliases: ['c'],
-    usage: 'check [user]',
+    usage: 'check [username]',
     description: 'Command to check if a player meets top player/top player+ requirements',
     async execute(message, args, config, fs) {
         var username;

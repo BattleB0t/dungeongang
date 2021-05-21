@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'votedout',
     aliases: ['vo'],
-    usage: 'votedout add/remove [user]',
+    usage: 'votedout add/remove [username]',
     description: 'Adds/removes a user from the voted out list',
     async execute(message, args, config, fs) {
         if(!message.member.roles.cache.has(config.discord.staff_role)){

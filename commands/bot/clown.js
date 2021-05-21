@@ -4,7 +4,7 @@ const axios = require('axios')
 module.exports = {
     name: 'clown',
     aliases: [],
-    usage: 'clown add/remove [user]',
+    usage: 'clown add/remove [username]',
     description: 'Adds/removes a user from the clown list',
     async execute(message, args, config, fs) {
         if(!message.member.roles.cache.has(config.discord.staff_role)){
