@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
-const polls = require('../polled_users.json')
+const polls = require('../data/polled_users.json')
 const fs = require('fs')
-const config = require('../config.json')
+const config = require('../data/config.json')
 
 
 global.createErrorEmbed = function createErrorEmbed(error) {
@@ -57,7 +57,7 @@ global.writePoll = function (message_id, user_id, rating) {
             polls.active_polls.splice(pos2, 1)
             break;
         }
-        return fs.writeFileSync('./polled_users.json', JSON.stringify(polls, null, 2))
+        return fs.writeFileSync('./data/polled_users.json', JSON.stringify(polls, null, 2))
       }
     }
   }
@@ -82,7 +82,7 @@ global.unWritePoll = function (message_id, user_id, rating) {
             polls.uuids[i][uuid][j].votes_negative.splice(pos3, 1)
             break;
         }
-        return fs.writeFileSync('./polled_users.json', JSON.stringify(polls, null, 2))
+        return fs.writeFileSync('./data/polled_users.json', JSON.stringify(polls, null, 2))
       }
     }
   }

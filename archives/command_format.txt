@@ -1,0 +1,7 @@
+module.exports = {
+    name: 'command-name',
+    aliases: [],
+    usage: '',
+    description: '',
+    async execute(message, args, config, fs) {},
+};

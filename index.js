@@ -1,25 +1,26 @@
-//---------- VARIABLES ----------
-const Discord = require('discord.js')
-const axios = require('axios')
-const client = new Discord.Client({ partials: ['USER', 'MESSAGE', 'REACTION'] })
-const polledUsers = require('./polled_users.json')
-const config = require('./config.json')
+const fs = require('fs');
+const Discord = require('discord.js');
+const Client = require('./client/Client');
+const { token, prefix} = require('./data/config.json');
+const config = require('./data/config.json')
+const client = new Client();
+client.commands = new Discord.Collection();
+const commandFolders = fs.readdirSync('./commands');
 const apiFunctions = require('./functions/apiFunctions.js')
 const miscFunctions = require('./functions/miscFunctions.js')
-const PPREFIX = config.discord.poll_prefix
-const DPREFIX = config.discord.bot_prefix
-//---------- POLL COMMANDS ----------
-const polls = require('./commands/poll.js')
-const endpoll = require('./commands/endpoll.js')
-const help = require('./commands/help.js')
-const check = require('./commands/check.js')
-//---------- BOT COMMANDS ----------
-const check2 = require('./commands/bot/check.js')
-const votedout = require('./commands/bot/votedout.js')
-const clown = require('./commands/bot/clown.js')
-const updateUser = require('./commands/bot/updateUser.js')
-const botCalc = require('./commands/bot/calc.js')
-const fs = require('fs')
+
+for (const folder of commandFolders) {
+    const commandFiles = fs
+        .readdirSync(`./commands/${folder}`)
+        .filter(file => file.endsWith('.js'));
+    for (const file of commandFiles) {
+        const command = require(`./commands/${folder}/${file}`);
+        client.commands.set(command.name, command);
+    }
+}
+
+console.log(client.commands);
+
 client.on('ready', async () => {
     console.log(`Starting Poll Bot v1.0.0`);
     client.user.setActivity(`Nice PB Kid`, {
@@ -30,49 +31,23 @@ client.on('ready', async () => {
     }, 60 * 1000);
 })
 
-client.on('message', async message =>{
-    if(message.author.bot) return;
-    if(!message.guild) return;
-    if(message.content.startsWith(PPREFIX)){
-        let args = message.content.substring(PPREFIX.length).split(" ");
-        switch(args[0]){
-            case "poll":
-                await polls.data.polls(message, args)
-                break;
-            case "end":
-                await endpoll.data.endpoll(message, args)
-                break;
-            case "help":
-                help.data.help(message)
-                break;
-            case "check":
-                await check.data.check(message, args)
-                break;
-        }
-    }
-    if(message.content.startsWith(DPREFIX)){
-        let args = message.content.substring(DPREFIX.length).split(" ");
-        switch(args[0]){
-            case "c":
-            case "check":
-                await check2.data.check(message, args, config)
-                break;
-            case "clown":
-                await clown.data.clown(message, args, config, fs)
-                break;
-            case "votedout":
-                await votedout.data.votedout(message, args, config, fs)
-                break;
-           case "uupdate":
-                await updateUser.data.updateUser(message, message.member.user.tag, args, config, fs)
-                break;
-           case "calc":
-                await botCalc.data.calc(message, args)
-                break;
-        }
-    }
-})
+client.on('message', async (message) => {
+    const cmdargs = message.content.slice(prefix.length).split(/ +/);
+    const commandName = cmdargs.shift().toLowerCase();
+    const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
+    if (!message.guild) return;
+    if (message.author.bot) return;
+    if (!message.content.startsWith(prefix)) return;
+
+
+    if(command == 'help'){
+        command.execute(message, cmdargs, config, fs)
+    }else{
+        let args = message.content.substring(prefix.length).split(" ");
+        command.execute(message, args, config, fs)
+    }
+});
 
 client.on('messageReactionAdd', async (reaction, user) => {
     if(reaction.partial) await reaction.fetch();
@@ -143,4 +118,4 @@ global.endPollEmbed = async function(message_id, channel_id, EditedPollEmbed){
     })
 }
 
-client.login(config.discord.bot_token)
+client.login(token)

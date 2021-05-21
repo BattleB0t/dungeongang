@@ -1,6 +1,6 @@
 const axios = require('axios')
 const { GuildMemberRoleManager } = require('discord.js')
-const config = require('../config.json')
+const config = require('../data/config.json')
 
 global.handleSenitherError = function HandleError(error, username){
     let status = error?.response?.data?.status || error.reponse.status
