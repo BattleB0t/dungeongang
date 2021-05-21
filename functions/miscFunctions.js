@@ -3,6 +3,9 @@ const polls = require('../data/polled_users.json')
 const fs = require('fs')
 const config = require('../data/config.json')
 
+global.sleep = function (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 global.createErrorEmbed = function createErrorEmbed(error) {
   let error_embed = new Discord.MessageEmbed()
@@ -10,6 +13,19 @@ global.createErrorEmbed = function createErrorEmbed(error) {
     .setTitle('<:no:838802013541498890> Error')
     .setDescription(error)
   return error_embed
+}
+
+Discord.TextChannel.prototype.sendError = async function (error) {
+  this.send(createErrorEmbed(error)).then(async message => {
+    await sleep(20000)
+    message.delete()
+  })
+}
+
+Discord.Message.prototype.editError = async function (error) {
+  this.edit(createErrorEmbed(error))
+  await sleep(20000)
+  this.delete()
 }
 global.createSuccessEmbed = function createSuccessEmbed(success) {
   let success_embed = new Discord.MessageEmbed()

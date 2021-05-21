@@ -2,9 +2,9 @@ const axios = require('axios')
 const { GuildMemberRoleManager } = require('discord.js')
 const config = require('../data/config.json')
 
-global.handleSenitherError = function HandleError(error, username){
+global.handleSenitherError = function HandleError(error, username) {
     let status = error?.response?.data?.status || error.reponse.status
-    switch(status){
+    switch (status) {
         case 403:
             return 'The API key in the config.json file is invalid.'
         case 404:
@@ -19,83 +19,85 @@ global.handleSenitherError = function HandleError(error, username){
             return 'The Hypixel API is currently under maintenance, please try again later.'
         default:
             console.log(error)
-            return 'An unknown error has occurred with the error code: '+ status +', please contact nick#0404 for more help.'
+            return 'An unknown error has occurred with the error code: ' + status + ', please contact nick#0404 for more help.'
     }
 }
 
-global.getUUID = async function getUUID(username){
-    try{
+global.getUUID = async function getUUID(username) {
+    try {
         var response = await axios.get(`https://api.mojang.com/users/profiles/minecraft/${username}`)
-        if(!response.data.id){
+        if (!response.data.id) {
             return 'invalid player'
         }
         var uuid = response.data.id
         uuid = uuid.substr(0, 8) + "-" + uuid.substr(8, 4) + "-" + uuid.substr(12, 4) + "-" + uuid.substr(16, 4) + "-" + uuid.substr(20)
         return uuid
-    }catch(error){
+    } catch (error) {
         return 'invalid player'
     }
 }
-global.getIGN = async function getIGN(uuid){
-    try{
+global.getIGN = async function getIGN(uuid) {
+    try {
         response = await axios.get(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`)
         return response.data.name
-    }catch(error){
+    } catch (error) {
         return 'invalid uuid'
     }
 }
-global.findStats = async function findStats(uuid){
-    try{
-        function fmtMSS(s){return(s-(s%=60))/60+(9<s?':':':0')+s}
-        response = await axios.get(`https://hypixel-api.senither.com/v1/profiles/${uuid}/weight?key=`+ config.minecraft.apiKey)
+global.findStats = async function findStats(uuid) {
+    try {
+        function fmtMSS(s) { return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + s }
+
+        response = await HypixelApiRequest(`https://hypixel-api.senither.com/v1/profiles/${uuid}/weight?key=` + config.minecraft.apiKey, 2)
+        if (response === "Api throttle") { return response; }
         var skillAverage = response?.data?.data?.skills?.average_skills?.toFixed(2) || "No Skill Data Found"
         var slayer = response?.data?.data?.slayers?.total_experience || "No Slayer Data Found"
-        if(slayer == "No Slayer Data Found"){
+        if (slayer == "No Slayer Data Found") {
             slayer = "No Slayer Data Found"
-        }else{
-            if(slayer >= 1000000){
-                slayer = (slayer/1000000).toFixed(2) + 'M'
-            }else if(slayer >= 1000 && slayer < 1000000){
-                slayer = (slayer/1000).toFixed(2) + 'K'
+        } else {
+            if (slayer >= 1000000) {
+                slayer = (slayer / 1000000).toFixed(2) + 'M'
+            } else if (slayer >= 1000 && slayer < 1000000) {
+                slayer = (slayer / 1000).toFixed(2) + 'K'
             }
         }
         var zombieSlayer = response?.data?.data?.slayers?.bosses?.revenant?.experience || "No Slayer Data Found"
-        if(zombieSlayer == "No Slayer Data Found"){
+        if (zombieSlayer == "No Slayer Data Found") {
             zombieSlayer = "No Slayer Data Found"
-        }else{
+        } else {
             if (zombieSlayer >= 1000000) {
-                zombieSlayer = (zombieSlayer/1000000).toFixed(2) + 'M'
-            }else if(zombieSlayer >= 1000 && zombieSlayer < 1000000){
-                zombieSlayer = (zombieSlayer/1000).toFixed(2) + 'K'
+                zombieSlayer = (zombieSlayer / 1000000).toFixed(2) + 'M'
+            } else if (zombieSlayer >= 1000 && zombieSlayer < 1000000) {
+                zombieSlayer = (zombieSlayer / 1000).toFixed(2) + 'K'
             }
         }
         var taraSlayer = response?.data?.data?.slayers?.bosses?.tarantula?.experience || "No Slayer Data Found"
-        if(taraSlayer == "No Slayer Data Found"){
+        if (taraSlayer == "No Slayer Data Found") {
             taraSlayer = "No Slayer Data Found"
-        }else{
-            if(taraSlayer >= 1000000){
-                taraSlayer = (taraSlayer/1000000).toFixed(2) + 'M'
-            }else if(taraSlayer >= 1000 && taraSlayer < 1000000){
-                taraSlayer = (taraSlayer/1000).toFixed(2) + 'K'
+        } else {
+            if (taraSlayer >= 1000000) {
+                taraSlayer = (taraSlayer / 1000000).toFixed(2) + 'M'
+            } else if (taraSlayer >= 1000 && taraSlayer < 1000000) {
+                taraSlayer = (taraSlayer / 1000).toFixed(2) + 'K'
             }
         }
         var wolfSlayer = response?.data?.data?.slayers?.bosses?.sven?.experience || "No Slayer Data Found"
-        if(wolfSlayer = "No Slayer Data Found"){
+        if (wolfSlayer = "No Slayer Data Found") {
             wolfSlayer = "No Slayer Data Found"
-        }else{
-            if(wolfSlayer >= 1000000){
-                wolfSlayer = (wolfSlayer/1000000).toFixed(2) + 'M'
-            }else if(wolfSlayer >= 1000 && wolfSlayer < 1000000){
-                wolfSlayer = (wolfSlayer/1000).toFixed(2) + 'K'
+        } else {
+            if (wolfSlayer >= 1000000) {
+                wolfSlayer = (wolfSlayer / 1000000).toFixed(2) + 'M'
+            } else if (wolfSlayer >= 1000 && wolfSlayer < 1000000) {
+                wolfSlayer = (wolfSlayer / 1000).toFixed(2) + 'K'
             }
         }
         var cataLevel = response?.data?.data?.dungeons?.types?.catacombs?.level.toFixed(2) || "No Dungeon Data Found"
         var selectedClass = response?.data?.data?.dungeons?.selected_class?.charAt(0)?.toUpperCase() + response?.data?.data?.dungeons?.selected_class?.slice(1) || "No Dungeon Data Found"
         var fastestTimeSeconds = response?.data?.data?.dungeons?.types?.catacombs?.fastest_time_s_plus?.tier_7?.seconds?.toFixed(0) || "No PB Found"
-        if(fastestTimeSeconds == "No PB Found"){
+        if (fastestTimeSeconds == "No PB Found") {
             fastestTimeMS = "No PB Found"
             fastestTime = "No PB Found"
-        }else{
+        } else {
             fastestTimeMS = fastestTimeSeconds * 1000
             fastestTime = fmtMSS(fastestTimeSeconds)
         }
@@ -116,9 +118,9 @@ global.findStats = async function findStats(uuid){
         var slayerWeight = response?.data?.data?.slayers?.weight?.toFixed(2) || "No Weight Data Found"
         var totalWeight = response?.data?.data?.weight + response?.data?.data?.weight_overflow || "No Weight Data Found"
         var profileID = response?.data?.data?.id || "No Profile ID Found"
-        if(totalWeight == "No Weight Data Found"){
+        if (totalWeight == "No Weight Data Found") {
             totalWeight = "No Weight Data Found"
-        }else{
+        } else {
             totalWeight = totalWeight.toFixed(2)
         }
         var stats = {}
@@ -126,12 +128,12 @@ global.findStats = async function findStats(uuid){
         stats.foraging = foraging
         stats.enchanting = enchanting
         stats.farming = farming
-        stats.combat = combat 
-        stats.fishing = fishing 
+        stats.combat = combat
+        stats.fishing = fishing
         stats.alchemy = alchemy
         stats.taming = taming
         stats.carpentry = carpentry
-        stats.runecrafting = runecrafting 
+        stats.runecrafting = runecrafting
         stats.slayer = slayer
         stats.catacombs = cataLevel
         stats.selectedClass = selectedClass
@@ -149,37 +151,55 @@ global.findStats = async function findStats(uuid){
         stats.totalWeight = totalWeight
         stats.profileID = profileID
         return stats
-    }catch(error){
+    } catch (error) {
         return ['error', handleSenitherError(error, await getIGN(uuid))]
     }
-  }
+}
 
-global.getMaster = async function getMaster(profileID, uuid){
-    let mojang = await axios.get('https://sessionserver.mojang.com/session/minecraft/profile/'+ uuid)
+global.getMaster = async function getMaster(profileID, uuid) {
+    let mojang = await axios.get('https://sessionserver.mojang.com/session/minecraft/profile/' + uuid)
     uuid = mojang.data.id
-    let response = await axios.get(`https://api.hypixel.net/skyblock/profile?key=${config.minecraft.apiKey}&profile=${profileID}`);
+
+    let response = await HypixelApiRequest(`https://api.hypixel.net/skyblock/profile?key=${config.minecraft.apiKey}&profile=${profileID}`)
+    if (response === "Api throttle") { return response; }
     masterPB = response?.data?.profile?.members[uuid]?.dungeons?.dungeon_types?.master_catacombs?.fastest_time_s_plus?.[6] || "No PB Found"
-    function fmtMStoMSS(millis){
+    function fmtMStoMSS(millis) {
         var minutes = Math.floor(millis / 60000);
         var seconds = ((millis % 60000) / 1000).toFixed(0);
         return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
     }
     let json = {}
-    if(masterPB == "No PB Found"){
+    if (masterPB == "No PB Found") {
         json.masterPB = masterPB
-    }else{
+    } else {
         json.masterPB = fmtMStoMSS(masterPB)
     }
     json.masterPBSeconds = masterPB
     return json
 }
 
-global.getDiscordFromPlayer = async function(uuid) {
-    let response = await axios.get(`https://api.hypixel.net/player?key=${config.minecraft.apiKey}&uuid=${uuid}`);
+global.getDiscordFromPlayer = async function (uuid) {
+    let response = await HypixelApiRequest(`https://api.hypixel.net/player?key=${config.minecraft.apiKey}&uuid=${uuid}`);
+    if (response === "Api throttle") { return response; }
     return response?.data?.player?.socialMedia?.links?.DISCORD || "Player does not have a linked discord"
 }
 
 global.getPureHypixelResponse = async function (uuid) {
-    let response = await axios.get(`https://api.hypixel.net/skyblock/profiles?key=${config.minecraft.apiKey}&uuid=${uuid}`)
+    let response = await HypixelApiRequest(`https://api.hypixel.net/skyblock/profiles?key=${config.minecraft.apiKey}&uuid=${uuid}`)
+    if (response === "Api throttle") { return response; }
     return response.data
+}
+
+setInterval(() => {
+    requestCount = 0
+}, 60000);
+
+global.requestCount = 0
+global.HypixelApiRequest = async function (url, requestAdd = 1) {
+    requestCount += requestAdd
+    if (requestCount > 115) {
+        return "Api throttle"
+    }
+    let response = await axios.get(url)
+    return response
 }

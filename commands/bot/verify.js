@@ -1,7 +1,5 @@
 const Discord = require('discord.js')
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+
 
 module.exports = {
     name: 'verify',
@@ -14,23 +12,16 @@ module.exports = {
         let tag = message.member.user.tag
         let username
         let originalMessage = message
-        if(message.channel.id != config.discord.verification_channel){
-            return message.channel.send(createErrorEmbed('Please use this command in <#'+ config.discord.verification_channel +'>'))
-        }
-        if(message.member.roles.cache.find(r => r.id === config.discord.member_role) && verified.user_ids.includes(message.author.id)){
-            return message.channel.send(createErrorEmbed('You are already verified!'))
-        }
         if (!args[1]) {
-            try {
-                username = message.member.displayName;
-                username = username.split(" ")[1]
-                username = username.replace(/\W/g, '');
-            } catch (error) {
-                return message.channel.send(createErrorEmbed('An error has occurred while getting this user\'s username'))
-            }
-        } else {
-            username = args[1];
+            return message.channel.sendError('invalid usage, do -verify [IGN]')
         }
+        if (message.channel.id != config.discord.verification_channel) {
+            return message.channel.sendError('Please use this command in <#' + config.discord.verification_channel + '>')
+        }
+        if (message.member.roles.cache.find(r => r.id === config.discord.member_role) && verified.user_ids.includes(message.author.id)) {
+            return message.channel.sendError('You are already verified!')
+        }
+        username = args[1];
         return message.channel.send(
             new Discord.MessageEmbed()
                 .setColor('0x00bfff')
@@ -39,47 +30,49 @@ module.exports = {
             .then(async message => {
                 let uuid = await getUUID(username)
                 if (uuid == 'invalid player') {
-                    return message.edit(createErrorEmbed('This player does not exist!'))
+                    return message.editError('This player does not exist!')
                 }
                 let data = await findStats(uuid)
                 if (data[0] == 'error') {
                     data.shift()
-                    return message.edit(createErrorEmbed(data.toString()))
+                    return message.editError(data.toString())
                 }
                 let linkedDiscord = await getDiscordFromPlayer(uuid)
                 if (linkedDiscord == "Player does not have a linked discord") {
-                    return message.edit(createErrorEmbed('You must link your discord in hypixel!'))
+                    return message.editError('You must link your discord in hypixel!')
                 } else if (linkedDiscord != tag) {
-                    return message.edit(createErrorEmbed('That minecraft account is connected to a different discord!'))
+                    return message.editError('That minecraft account is connected to a different discord!')
                 }
                 let cataLevel = Math.floor(data.catacombs)
                 originalMessage.member.giveCorrectCataRole(cataLevel)
-                if(verified.user_ids.includes(message.author.id)){
+                if (verified.user_ids.includes(originalMessage.member.id)) {
                     message.channel.send(createSuccessEmbed('You are already verified, giving member role...'))
                     try {
                         await originalMessage.member.setNickname(`❮${cataLevel}❯ ${username}`)
                     } catch (e) { console.log(e) }
-                    return message.member.roles.add(r => r.id === config.discord.member_role)
+                    console.log(config.discord.member_role)
+                    await originalMessage.member.roles.add(config.discord.member_role)
+                    return;
                 }
                 try {
                     await originalMessage.member.setNickname(`❮${cataLevel}❯ ${username}`)
                 } catch (e) { console.log(e) }
-                let verifiedJson = {
-                    [message.author.id]: {
-                      "uuid": uuid,
-                      "emotes": {
+                await originalMessage.member.roles.add(config.discord.member_role)
+                verified.users[originalMessage.member.id] = {
+                    "uuid": uuid,
+                    "emotes": {
                         "unlocked_emotes": [],
                         "slots": [
-                          {
-                            "slot_id": 1,
-                            "emote": "none",
-                            "type": "default"
-                          }
+                            {
+                                "slot_id": 1,
+                                "emote": "none",
+                                "type": "default"
+                            }
                         ]
-                      }
                     }
-                  }
-                verified.users.push(verifiedJson)
+                }
+
+                verified.user_ids.push(originalMessage.member.id)
                 fs.writeFileSync('./data/verified.json', JSON.stringify(verified, null, 2))
                 message.edit(createSuccessEmbed(`Verified as **${username}** with catacombs level **${cataLevel}**!`));
                 await sleep(15000)

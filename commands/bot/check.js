@@ -8,17 +8,17 @@ module.exports = {
     async execute(message, args, config, fs) {
         var username;
         if(!message.member.roles.cache.has(config.discord.staff_role)){
-            return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
+            return message.channel.sendError('You do not have permission to use this command!')
         }
         if(!args[1]){
-            return message.channel.send(createErrorEmbed('No username provided.'))
+            return message.channel.sendError('No username provided.')
         }else if(message.mentions.members.first()){
             try{
                 username = message.mentions.members.first().displayName;
                 username = username.split(" ")[1]
                 username = username.replace(/\W/g, '');
             }catch(error){
-                return message.channel.send(createErrorEmbed('An error has occurred while getting this user\'s username'))
+                return message.channel.sendError('An error has occurred while getting this user\'s username')
             }
         }else{ 
             username = args[1];
@@ -32,17 +32,18 @@ module.exports = {
             let votedList = JSON.parse(fs.readFileSync('./data/votedout.json'))
             let clownList = JSON.parse(fs.readFileSync('./data/clowns.json'))
             if(await getUUID(username) == 'invalid player'){
-                return message.edit(createErrorEmbed('This player does not exist!'))
+                return message.sendError('This player does not exist!')
             }
             let uuid = await getUUID(username)
             if(await getIGN(uuid) == 'invalid uuid'){
-                return message.edit(createErrorEmbed('An error has occurred while making the poll, please try again later.'))
+                return message.sendError('An error has occurred while making the poll, please try again later.')
             }
             let IGN = await getIGN(uuid)
             let data = await findStats(uuid)
+            if (data === "Api throttle") { return message.editError("Api throttle") }
             if(data[0] == 'error'){
                 data.shift()
-                return message.edit(createErrorEmbed(data.toString()))
+                return message.editError(data.toString())
             }
             let master = await getMaster(data.profileID, uuid)
             if(master == 'No PB Found') master.masterPB = 'No PB Found'

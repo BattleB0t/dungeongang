@@ -1,20 +1,20 @@
 {
-    "user_ids": [],
-    "users": [
-      {
-        "[message.author.id]": {
-          "uuid": "uuid",
-          "emotes": {
-            "unlocked_emotes": [],
-            "slots": [
-              {
-                "slot_id": 1,
-                "emote": "none",
-                "type": "free"
-              }
-            ]
+  "user_ids": [
+    "343129897360949248"
+  ],
+  "users": {
+    "343129897360949248": {
+      "uuid": "b9d90392-1240-48bb-993f-8f1b836657a8",
+      "emotes": {
+        "unlocked_emotes": [],
+        "slots": [
+          {
+            "slot_id": 1,
+            "emote": "none",
+            "type": "default"
           }
-        }
+        ]
       }
-    ]
+    }
   }
+}

@@ -34,6 +34,7 @@ client.on('message', async (message) => {
     const cmdargs = message.content.slice(prefix.length).split(/ +/);
     const commandName = cmdargs.shift().toLowerCase();
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+    if (!command) return;
     if (!message.guild) return;
     if (message.author.bot) return;
     if (!message.content.startsWith(prefix)) return;

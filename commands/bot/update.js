@@ -1,7 +1,5 @@
 const Discord = require('discord.js')
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+
 module.exports = {
     name: 'update',
     aliases: [],
@@ -9,21 +7,25 @@ module.exports = {
     description: 'Updates your catacombs level and emotes',
     async execute(message, args, config, fs) {
         message.delete()
+        let verified = JSON.parse(fs.readFileSync('./data/verified.json'))
         let username
         let tag = message.member.user.tag
         let originalMessage = message
         if (!args[1]) {
-            try {
-                username = message.member.displayName;
-                username = username.split(" ")[1]
-                username = username.replace(/\W/g, '');
-            } catch (error) {
-                return message.channel.send(createErrorEmbed('An error has occurred while getting this user\'s username'))
+            if (verified.user_ids.includes(message.member.id)) {
+                username = await getIGN(verified.users[message.member.id].uuid)
+            } else {
+                try {
+                    username = message.member.displayName;
+                    username = username.split(" ")[1]
+                    username = username.replace(/\W/g, '');
+                } catch (error) {
+                    return message.channel.sendError('An error has occurred while getting this user\'s username')
+                }
             }
         } else {
             username = args[1];
         }
-        // console.log(username)
         return message.channel.send(
             new Discord.MessageEmbed()
                 .setColor('0x00bfff')
@@ -32,20 +34,23 @@ module.exports = {
             .then(async message => {
                 let uuid = await getUUID(username)
                 if (uuid == 'invalid player') {
-                    return message.edit(createErrorEmbed('This player does not exist!'))
+                    return message.editError('This player does not exist!')
                 }
                 let data = await findStats(uuid)
+                if (data === "Api throttle") { return message.editError("Api throttle") }
                 if (data[0] == 'error') {
                     data.shift()
-                    return message.edit(createErrorEmbed(data.toString()))
+                    return message.editError(data.toString())
                 }
                 let linkedDiscord = await getDiscordFromPlayer(uuid)
+                // console.log(linkedDiscord)
+                if (linkedDiscord === "Api throttle") { return message.editError('Api throttle') }
                 if (linkedDiscord == "Player does not have a linked discord") {
-                    return message.edit(createErrorEmbed('You must link your discord in hypixel!'))
+                    return message.editError('You must link your discord in hypixel!')
                 } else if (linkedDiscord != tag) {
                     // console.log(linkedDiscord)
                     // console.log(tag)
-                    return message.edit(createErrorEmbed('That minecraft account is connected to a different discord!'))
+                    return message.editError('That minecraft account is connected to a different discord!')
                 }
                 let cataLevel = Math.floor(data.catacombs)
                 let DiscordEmoji = originalMessage.member.displayName.split(" ")
