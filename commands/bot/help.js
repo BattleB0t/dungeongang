@@ -40,11 +40,13 @@ module.exports = {
             embed.addField('Info', [
                 `Prefix: \`${config.prefix}\``,
                 `Channel: ${message.channel}`,
-                `Discord: [Dungeon Gang](https://discord.gg/dungeon)`
+                `Discord: [Dungeon Gang](https://discord.gg/dungeon)`,
+                `Utility & Poll Bot`,
+                `Made by nick#0404 and alon#1396`
             ].join('\n'), true)
 
             embed.addField('Stats', [
-                `Unique users: \`${message.client.users.cache.size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\``,
+                `Server Members: \`${message.client.users.cache.size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\``,
                 `Servers: \`${message.client.guilds.cache.size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\``,
                 `Version: \`${package.version}\``,
                 `Uptime: \`${timeConversion(message.client.uptime)}\``,
@@ -75,17 +77,12 @@ module.exports = {
         embed.addField('Aliases', `\`${command.aliases.join('\n')}\``, true)
 
         return message.channel.send(embed)
-            .then(() => {
-                message.react(yes);
-            })
             .catch(() => {
                 message.channel.send(
                     new Discord.MessageEmbed()
                         .setDescription(`${message.author}, Error!`)
                         .setColor('0x00bfff')
-                ).then(() => {
-                    message.react(no);
-                })
+                )
             });
     },
 };
