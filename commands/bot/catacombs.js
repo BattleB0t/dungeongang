@@ -60,7 +60,7 @@ module.exports = {
                 let catacombs = data.cataLevel
                 let master6 = data['M6']['S+']
                 let floor7 = data['F7']['S+']
-                let secrets = secrets.secretCount
+                let secretsFound = secrets.secretCount
                 let voted = false
                 let clown = '<:no:838802013541498890>'
                 let tp = '<:no:838802013541498890>'
@@ -68,12 +68,12 @@ module.exports = {
                 if (votedList.users.includes(uuid)) voted = true
                 if (clownList.users.includes(uuid)) clown = '<:yes:838801988241588304>'
                 if (!isNaN(catacombs)) {
-                    if (catacombs >= 38 && secrets >= 12000 && floor7 <= 285000) {
+                    if (catacombs >= 38 && secretsFound >= 12000 && floor7 <= 285000) {
                         tp = '<:yes:838801988241588304>'
                     }
                 }
                 if (!isNaN(catacombs)) {
-                    if (catacombs >= 42 && secrets >= 20000 && voted == false) {
+                    if (catacombs >= 42 && secretsFound >= 20000 && voted == false) {
                         if (floor7 <= 250000) {
                             tpp = '<:yes:838801988241588304>'
                         }
@@ -99,7 +99,7 @@ module.exports = {
                         },
                         {
                             "name": "**Secrets**",
-                            "value": `${secrets}`
+                            "value": `${secretsFound}`
                         },
                         {
                             "name": "**Floor 7 S+ PB**",
