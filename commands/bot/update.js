@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 
 module.exports = {
-    name: 'update',
+    name: 'uupdate',
     aliases: [],
     usage: 'update (username)',
     description: 'Updates your catacombs level and emotes',

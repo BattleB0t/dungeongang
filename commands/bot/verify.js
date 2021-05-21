@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 
 
 module.exports = {
-    name: 'verify',
+    name: 'vverify',
     aliases: [],
     usage: 'verify [username]',
     description: 'Verifies and links your minecraft account to your discord account',
