@@ -8,6 +8,7 @@ client.commands = new Discord.Collection();
 const commandFolders = fs.readdirSync('./commands');
 const apiFunctions = require('./functions/apiFunctions.js')
 const miscFunctions = require('./functions/miscFunctions.js')
+let polledUsers = require('./data/polled_users.json')
 
 for (const folder of commandFolders) {
     const commandFiles = fs
