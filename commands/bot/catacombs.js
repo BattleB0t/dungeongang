@@ -71,7 +71,7 @@ module.exports = {
                 if (data === "Api throttle") { return message.edit(createErrorEmbed("API Throttle: Please try again later.")) }
                 if (secrets === "Api throttle") { return message.edit(createErrorEmbed("API Throttle: Please try again later.")) }
                 let catacombs = data.cataLevel
-                let master6 = data['M6']['s']
+                let master6 = data['M6']['sPlus']
                 let floor7 = data['F7']['sPlus']
                 let secretsFound = secrets.secretCount
                 let voted = false
