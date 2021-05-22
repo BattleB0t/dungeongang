@@ -61,6 +61,7 @@ module.exports = {
                     return message.editError('That minecraft account is connected to a different discord!')
                 }
                 let cataLevel = catacombs.cataLevel
+                cataLevel = Math.floor(parseInt(cataLevel))
                 originalMessage.member.giveCorrectCataRole(cataLevel)
                 if (verified.user_ids.includes(originalMessage.member.id)) {
                     message.edit(createSuccessEmbed('You are already verified, giving member role...'))
@@ -79,13 +80,10 @@ module.exports = {
                     "uuid": uuid,
                     "emotes": {
                         "unlocked_emotes": [],
-                        "slots": [
-                            {
-                                "slot_id": 1,
-                                "emote": "none",
-                                "type": "default"
-                            }
-                        ]
+                        "given_emotes": [],
+                        "slots": {
+                            "default": "none"
+                        }
                     }
                 }
 

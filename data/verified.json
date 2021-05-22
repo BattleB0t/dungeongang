@@ -1,33 +1,66 @@
 {
   "user_ids": [
     "343129897360949248",
-    "347884694408265729"
+    "347884694408265729",
+    "363199691946459136",
+    "382888587559174144"
   ],
   "users": {
     "343129897360949248": {
       "uuid": "b9d90392-1240-48bb-993f-8f1b836657a8",
       "emotes": {
         "unlocked_emotes": [],
-        "slots": [
-          {
-            "slot_id": 1,
-            "emote": "none",
-            "type": "default"
-          }
-        ]
+        "given_emotes": [],
+        "slots": {
+          "default": "none"
+        }
       }
     },
     "347884694408265729": {
       "uuid": "92fea327bc264e3d8afe5ffc83868624",
       "emotes": {
+        "unlocked_emotes": [
+          "★",
+          "⭐",
+          "🔊",
+          "💛",
+          "🎉",
+          "🤑",
+          "💜"
+        ],
+        "given_emotes": [],
+        "slots": {
+          "default": "none",
+          "staff": "none",
+          "vc500": "none",
+          "g_god": "none",
+          "booster": "none"
+        }
+      }
+    },
+    "363199691946459136": {
+      "uuid": "fdbfc8bdd0d546a0a715426805984885",
+      "emotes": {
         "unlocked_emotes": [],
-        "slots": [
-          {
-            "slot_id": 1,
-            "emote": "none",
-            "type": "default"
-          }
-        ]
+        "given_emotes": [],
+        "slots": {
+          "default": "none",
+          "staff": "none"
+        }
+      }
+    },
+    "382888587559174144": {
+      "uuid": "358b339a910e423e9cfe7a62a26d4ac1",
+      "emotes": {
+        "unlocked_emotes": [
+          "★",
+          "⭐"
+        ],
+        "given_emotes": [],
+        "slots": {
+          "default": "none",
+          "staff": "none"
+        }
       }
     }
   }
