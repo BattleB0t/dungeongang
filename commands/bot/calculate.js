@@ -92,7 +92,6 @@ module.exports = {
             username = username.split(" ")[1]
             username = username.replace(/\W/g, '');
             let uuid = await getUUID(username)
-            uuid = uuid.replace(/-/g, "")
             message.channel.send(
                 new Discord.MessageEmbed()
                     .setColor('0x00bfff')
@@ -101,8 +100,14 @@ module.exports = {
                 .then(async newMessage => {
                     let response = await getPureHypixelResponse(uuid)
                         .catch(error => {
-                            let errorMessage = error?.data?.cause || error.cause
-                            return message.edit(createErrorEmbed(errorMessage))
+                            if(!error.isAxiosError) {
+                                message.edit(createErrorEmbed(error))
+                                throw error
+                            }
+                            console.log('axios error')
+                            let errorMessage = error.response.data.cause
+                            message.edit(createErrorEmbed(errorMessage))
+                            throw error
                         })
                     if (response === "Api throttle") { return message.edit(createErrorEmbed("API Throttle: Please try again later.")) }
                     let cataXp = -1;

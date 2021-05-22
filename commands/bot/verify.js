@@ -34,8 +34,25 @@ module.exports = {
                 }
                 let data = await getSecretCountCataDiscord(uuid)
                     .catch(error => {
-                        let errorMessage = error?.data?.cause || error.cause
-                        return message.edit(createErrorEmbed(errorMessage))
+                        if(!error.isAxiosError) {
+                            message.edit(createErrorEmbed(error))
+                            throw error
+                        }
+                        console.log('axios error')
+                        let errorMessage = error.response.data.cause
+                        message.edit(createErrorEmbed(errorMessage))
+                        throw error
+                    })
+                let catacombs = await getCataAndPb(uuid)
+                    .catch(error => {
+                        if(!error.isAxiosError) {
+                            message.edit(createErrorEmbed(error))
+                            throw error
+                        }
+                        console.log('axios error')
+                        let errorMessage = error.response.data.cause
+                        message.edit(createErrorEmbed(errorMessage))
+                        throw error
                     })
                 let linkedDiscord = data.discord
                 if (linkedDiscord == "Player does not have a linked discord") {
@@ -43,7 +60,7 @@ module.exports = {
                 } else if (linkedDiscord != tag) {
                     return message.editError('That minecraft account is connected to a different discord!')
                 }
-                let cataLevel = data.cata
+                let cataLevel = catacombs.cataLevel
                 originalMessage.member.giveCorrectCataRole(cataLevel)
                 if (verified.user_ids.includes(originalMessage.member.id)) {
                     message.edit(createSuccessEmbed('You are already verified, giving member role...'))

@@ -128,3 +128,11 @@ global.handleSenitherError = function HandleError(error, username) {
             return 'An unknown error has occurred with the error code: ' + status + ', please contact nick#0404 for more help.'
     }
 }
+
+.catch(error => {
+    console.log('PPPP: ', error)
+    if(!error.data.isAxiosError) return message.edit(createErrorEmbed(error))
+    console.log('Not axios error')
+    let errorMessage = error?.data?.cause || error.cause
+    return message.edit(createErrorEmbed(errorMessage))
+})

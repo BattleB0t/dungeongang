@@ -45,15 +45,28 @@ module.exports = {
                 if (IGN == 'invalid uuid') {
                     return message.edit(createErrorEmbed('An error has occurred while making the poll, please try again later.'))
                 }
+                uuid = uuid
                 let data = await getCataAndPb(uuid)
                     .catch(error => {
-                        let errorMessage = error?.data?.cause || error.cause
-                        return message.edit(createErrorEmbed(errorMessage))
+                        if(!error.isAxiosError) {
+                            message.edit(createErrorEmbed(error))
+                            throw error
+                        }
+                        console.log('axios error')
+                        let errorMessage = error.response.data.cause
+                        message.edit(createErrorEmbed(errorMessage))
+                        throw error
                     })
-                let secrets = getSecretCountCataDiscord(uuid)
+                let secrets = await getSecretCountCataDiscord(uuid)
                     .catch(error => {
-                        let errorMessage = error?.data?.cause || error.cause
-                        return message.edit(createErrorEmbed(errorMessage))
+                        if(!error.isAxiosError) {
+                            message.edit(createErrorEmbed(error))
+                            throw error
+                        }
+                        console.log('axios error')
+                        let errorMessage = error.response.data.cause
+                        message.edit(createErrorEmbed(errorMessage))
+                        throw error
                     })
                 if (data === "Api throttle") { return message.edit(createErrorEmbed("API Throttle: Please try again later.")) }
                 if (secrets === "Api throttle") { return message.edit(createErrorEmbed("API Throttle: Please try again later.")) }
@@ -85,6 +98,8 @@ module.exports = {
                         }
                     }
                 }
+                if(!isNaN(floor7)) floor7 = fmtMStoMSS(floor7)
+                if(!isNaN(master6)) master6 = fmtMStoMSS(master6)
                 let checkEmbed = {
                     "color": 49151,
                     "author": {
@@ -103,11 +118,11 @@ module.exports = {
                         },
                         {
                             "name": "**Floor 7 S+ PB**",
-                            "value": `${fmtMStoMSS(floor7)}`
+                            "value": `${floor7}`
                         },
                         {
                             "name": "**Master 6 S+ PB**",
-                            "value": `${fmtMStoMSS(master6)}`
+                            "value": `${master6}`
                         },
                         {
                             "name": "**Voted-Out**",

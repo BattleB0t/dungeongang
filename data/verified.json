@@ -1,10 +1,24 @@
 {
   "user_ids": [
-    "343129897360949248"
+    "343129897360949248",
+    "347884694408265729"
   ],
   "users": {
     "343129897360949248": {
       "uuid": "b9d90392-1240-48bb-993f-8f1b836657a8",
+      "emotes": {
+        "unlocked_emotes": [],
+        "slots": [
+          {
+            "slot_id": 1,
+            "emote": "none",
+            "type": "default"
+          }
+        ]
+      }
+    },
+    "347884694408265729": {
+      "uuid": "92fea327bc264e3d8afe5ffc83868624",
       "emotes": {
         "unlocked_emotes": [],
         "slots": [
