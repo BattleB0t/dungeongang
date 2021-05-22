@@ -69,6 +69,7 @@ module.exports = {
                     return message.editError('That minecraft account is connected to a different discord!')
                 }
                 let cataLevel = catacombs.cataLevel
+                cataLevel = parseInt(cataLevel).toFixed(0)
                 let DiscordEmoji = originalMessage.member.displayName.split(" ")
                 DiscordEmoji.splice(0, 2)
                 DiscordEmoji = DiscordEmoji.join(" ")

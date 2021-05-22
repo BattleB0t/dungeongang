@@ -7,9 +7,9 @@ module.exports = {
     description: 'Command to check if a player meets top player/top player+ requirements',
     async execute(message, args, config, fs) {
         let username;
-        if (!message.member.roles.cache.has(config.discord.staff_role)) {
+        /*if (!message.member.roles.cache.has(config.discord.staff_role)) {
             return message.channel.send(createErrorEmbed('This command is not available to non-staff yet!'))
-        }
+        }*/ //Available overnight to test if api key gets reset or not
         if (!args[1]) {
             try {
                 username = message.member.displayName
