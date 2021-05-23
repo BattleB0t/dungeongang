@@ -6,7 +6,6 @@ module.exports = {
     usage: 'forceupdate <@person> [username]',
     description: 'Force updates a person\'s catacombs level and emotes (staff only)',
     async execute(message, args, config, fs) {
-        if (message.channel.id !== config.discord.update_channel && message.channel.id !== config.discord.staff_commands) { return; }
         if (!message.member.roles.cache.has(config.discord.staff_role)) {
             return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
         }
@@ -68,7 +67,7 @@ module.exports = {
                 let cataLevel = catacombs.cataLevel
                 cataLevel = parseInt(cataLevel).toFixed(0)
                 let DiscordEmoji = ''
-                if (verified.user_ids.includes(originalMessage.author.id)) {
+                if (verified.user_ids.includes(originalMessage.mentions.members.first().user.id)) {
                     try {
                         DiscordEmoji = originalMessage.mentions.members.first().getEmotes()
                         DiscordEmoji = DiscordEmoji.join('')
