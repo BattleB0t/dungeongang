@@ -264,6 +264,7 @@ Discord.GuildMember.prototype.giveCorrectCataRole = async function (cataLevel) {
 }
 
 global.currentEmoteList = JSON.parse(fs.readFileSync('./data/verified.json'))
+
 Discord.GuildMember.prototype.updateEmote = function (roleID, emote, conditionRole = true) {
   if (conditionRole !== true) {conditionRole = this.roles.cache.has(conditionRole)}
   if (this.roles.cache.has(roleID) && !currentEmoteList.users[this.user.id].emotes.unlocked_emotes.includes(emote) && conditionRole) {
@@ -293,6 +294,20 @@ Discord.GuildMember.prototype.hasEquipped = function (emote) {
     }
   }
   return false
+}
+
+Discord.GuildMember.prototype.getEmotes = function () {
+  currentEmoteList = JSON.parse(fs.readFileSync('./data/verified.json'))
+  let slots = currentEmoteList.users[this.user.id].emotes.slots
+  let slots2 = Object.keys(currentEmoteList.users[this.user.id].emotes.slots)
+  let emotes = []
+  for (let i = 0; i < slots2.length; i++) {
+    let slot = Object.keys(currentEmoteList.users[this.user.id].emotes.slots)[i]
+    if (!slots[slot] != 'none') {
+      emotes.push(slots[slot])
+    }
+  }
+  return emotes
 }
 
 global.updateAvailableEmotes = async function (message) {
@@ -329,6 +344,7 @@ Array.prototype.removeDuplicates = function() {
       return seen.hasOwnProperty(item) ? false : (seen[item] = true);
   });
 }
+
 
 global.createEmoteEmbed = async function(emotes, user) { 
   let slots = 0

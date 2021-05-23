@@ -59,51 +59,26 @@ module.exports = {
                         throw error
                     })
                 let linkedDiscord = data.discord
-                // console.log(linkedDiscord)
                 if (linkedDiscord === "Api throttle") { return message.editError('API Throttle: Please try again later.') }
                 if (linkedDiscord == "Player does not have a linked discord") {
                     return message.editError('You must link your discord in hypixel!')
                 } else if (linkedDiscord != tag) {
-                    // console.log(linkedDiscord)
-                    // console.log(tag)
                     return message.editError('That minecraft account is connected to a different discord!')
                 }
                 let cataLevel = catacombs.cataLevel
                 cataLevel = parseInt(cataLevel).toFixed(0)
-                let DiscordEmoji = originalMessage.member.displayName.split(" ")
-                DiscordEmoji.splice(0, 2)
-                DiscordEmoji = DiscordEmoji.join(" ")
-                // console.log(`❮${cataLevel}❯ ${username} ${DiscordEmoji}`)
-                if (originalMessage.member.roles.cache.find(role => role.id === config.discord.tpPlus_role)) {
-                    if (originalMessage.member.roles.cache.find(role => role.id === config.discord.subFour_role)) {
-                        if (!DiscordEmoji.includes("⭐")) {
-                            if (DiscordEmoji.includes("★")) {
-                                DiscordEmoji = DiscordEmoji.substring(0, DiscordEmoji.indexOf("★")) + DiscordEmoji.substring(DiscordEmoji.indexOf("★") + 2)
-                            }
-                            DiscordEmoji = "⭐ " + DiscordEmoji
-                        }
-                    } else if (!DiscordEmoji.includes("★")) {
-                        if (DiscordEmoji.includes("⭐")) {
-                            DiscordEmoji = DiscordEmoji.substring(0, DiscordEmoji.indexOf("⭐")) + DiscordEmoji.substring(DiscordEmoji.indexOf("⭐") + 2)
-                        }
-                        DiscordEmoji = "★ " + DiscordEmoji
-                    }
-                } else {
-                    if (DiscordEmoji.includes("★")) {
-                        DiscordEmoji = DiscordEmoji.substring(0, DiscordEmoji.indexOf("★")) + DiscordEmoji.substring(DiscordEmoji.indexOf("★") + 2)
-                    }
-                    if (DiscordEmoji.includes("⭐")) {
-                        DiscordEmoji = DiscordEmoji.substring(0, DiscordEmoji.indexOf("⭐")) + DiscordEmoji.substring(DiscordEmoji.indexOf("⭐") + 2)
-                    }
+                let DiscordEmoji = ''
+                if(verified.user_ids.includes(originalMessage.author.id)){
+                    let DiscordEmoji = originalMessage.member.getEmotes().join('').catch(e => {
+                        console.log(e)
+                        DiscordEmoji = ''
+                    })
                 }
-                // let discordCollection = new Discord.Collection()
-                // discordCollection.concat
                 originalMessage.member.giveCorrectCataRole(cataLevel)
                 let changeIntoName = `❮${cataLevel}❯ ${username} ${DiscordEmoji}`
                 if (originalMessage.member.roles.cache.find(role => role.id === config.discord.staff_role)) {
                     Object.keys(config.discord.staff_ranks).forEach(rank => {
                         if (originalMessage.member.roles.cache.has(rank)) {
-                            // console.log(1)
                             changeIntoName = changeIntoName.replace(/[❮❯]/g, config.discord.staff_ranks[rank])
                         }
                     })
