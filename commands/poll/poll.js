@@ -44,6 +44,7 @@ module.exports = {
           message.channel.send(createErrorEmbed(errorMessage))
           throw error
       })
+    uuid = uuid.substr(0, 8) + "-" + uuid.substr(8, 4) + "-" + uuid.substr(12, 4) + "-" + uuid.substr(16, 4) + "-" + uuid.substr(20)
     if (data === "Api throttle") { return message.channel.send(createErrorEmbed("API Throttle: Please try again later.")) }
     if (secrets === "Api throttle") { return message.channel.send(createErrorEmbed("API Throttle: Please try again later.")) }
     let catacombs = data.cataLevel

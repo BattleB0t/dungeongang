@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
-const polls = require('../data/polled_users.json')
 const fs = require('fs')
 const config = require('../data/config.json')
+let polls = JSON.parse(fs.readFileSync('./data/polled_users.json'))
 
 global.sleep = function (ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -36,6 +36,7 @@ global.createSuccessEmbed = function createSuccessEmbed(success) {
 }
 
 global.getPoll = function (message_id) {
+  polls = JSON.parse(fs.readFileSync('./data/polled_users.json'))
   for (let i = 0; i < polls.uuids.length; i++) {
     let uuid = Object.keys(polls.uuids[i])[0]
     for (let j = 0; j < polls.uuids[getIndex(uuid)][uuid].length; j++) {
@@ -47,6 +48,7 @@ global.getPoll = function (message_id) {
 }
 
 global.writePoll = function (message_id, user_id, rating) {
+  polls = JSON.parse(fs.readFileSync('./data/polled_users.json'))
   for (let i = 0; i < polls.uuids.length; i++) {
     let uuid = Object.keys(polls.uuids[i])[0]
     for (let j = 0; j < polls.uuids[getIndex(uuid)][uuid].length; j++) {
@@ -80,6 +82,7 @@ global.writePoll = function (message_id, user_id, rating) {
 }
 
 global.unWritePoll = function (message_id, user_id, rating) {
+  polls = JSON.parse(fs.readFileSync('./data/polled_users.json'))
   for (let i = 0; i < polls.uuids.length; i++) {
     let uuid = Object.keys(polls.uuids[i])[0]
     for (let j = 0; j < polls.uuids[getIndex(uuid)][uuid].length; j++) {
