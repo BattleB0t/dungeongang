@@ -77,7 +77,21 @@ module.exports = {
                         console.log(error)
                         DiscordEmoji = ''
                     }
+                } else {
+                    verified.users[originalMessage.member.id] = {
+                        "uuid": uuid,
+                        "emotes": {
+                            "unlocked_emotes": [],
+                            "given_emotes": [],
+                            "slots": {
+                                "default": "none"
+                            }
+                        }
+                    }
+                    verified.user_ids.push(originalMessage.member.id)
+                    fs.writeFileSync('./data/verified.json', JSON.stringify(verified, null, 2))
                 }
+                if (uuid !== verified.users[originalMessage.member.id].uuid) { verified.users[originalMessage.member.id].uuid = uuid }
                 originalMessage.member.giveCorrectCataRole(cataLevel)
                 let changeIntoName = `❮${cataLevel}❯ ${username} ${DiscordEmoji}`
                 if (originalMessage.member.roles.cache.find(role => role.id === config.discord.staff_role)) {
@@ -90,7 +104,7 @@ module.exports = {
                 try {
                     await originalMessage.member.setNickname(changeIntoName)
                 } catch (e) { console.log(e) }
-                
+
                 // console.log(changeIntoName)
                 message.edit(createSuccessEmbed(`Updated <@${originalMessage.member.id}> to catacombs level ${cataLevel}!`));
                 await sleep(15000)
