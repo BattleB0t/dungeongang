@@ -6,7 +6,7 @@ module.exports = {
   usage: 'poll [username]',
   description: 'Creates a poll for the specified user',
   async execute(message, args, config, fs) {
-    let polls = require('../../data/polled_users.json')
+    let polls = JSON.parse(fs.readFileSync('./data/polled_users.json'))
     if(!message.member.roles.cache.has(config.discord.poll_creation_role)){
         return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
     }
@@ -14,22 +14,45 @@ module.exports = {
         return message.channel.send(createErrorEmbed('No username provided.'))
     }
     let username = args[1]
-    if(await getUUID(username) == 'invalid player'){
+    let uuid = await getUUID(username)
+    if(uuid == 'invalid player'){
         return message.channel.send(createErrorEmbed('This player does not exist!'))
     }
-    let uuid = await getUUID(username)
-    if(await getIGN(uuid) == 'invalid uuid'){
+    let IGN = await getIGN(uuid)
+    if(IGN == 'invalid uuid'){
         return message.channel.send(createErrorEmbed('An error has occurred while making the poll, please try again later.'))
     }
-    let IGN = await getIGN(uuid)
-    let data = await findStats(uuid).catch(error => {
-      message.channel.send(createErrorEmbed('I was unable to create a poll for this user since I cannot access their fastest time.'))
-      throw new Error('Unable to access stats of player: '+ IGN)
+    let data = await getCataAndPb(uuid)
+    .catch(error => {
+        if(!error.isAxiosError) {
+            message.channel.send(createErrorEmbed(error))
+            throw error
+        }
+        console.log('axios error')
+        let errorMessage = error.response.data.cause
+        message.channel.send(createErrorEmbed(errorMessage))
+        throw error
     })
-    if(data[0] == 'error'){
-        data.shift()
-        return message.channel.send(createErrorEmbed(data.toString()))
-    }
+    let secrets = await getSecretCountCataDiscord(uuid)
+      .catch(error => {
+          if(!error.isAxiosError) {
+              message.channel.send(createErrorEmbed(error))
+              throw error
+          }
+          console.log('axios error')
+          let errorMessage = error.response.data.cause
+          message.channel.send(createErrorEmbed(errorMessage))
+          throw error
+      })
+    uuid = uuid.substr(0, 8) + "-" + uuid.substr(8, 4) + "-" + uuid.substr(12, 4) + "-" + uuid.substr(16, 4) + "-" + uuid.substr(20)
+    if (data === "Api throttle") { return message.channel.send(createErrorEmbed("API Throttle: Please try again later.")) }
+    if (secrets === "Api throttle") { return message.channel.send(createErrorEmbed("API Throttle: Please try again later.")) }
+    let catacombs = data.cataLevel
+    let master6 = data['M6']['sPlus']
+    let floor7 = data['F7']['sPlus']
+    let secretsFound = secrets.secretCount
+    if(!isNaN(floor7)) floor7 = fmtMStoMSS(floor7)
+    if(!isNaN(master6)) master6 = fmtMStoMSS(master6)
     let pollEndDate = new Date();
     let poll_id = 0
     if(polls.uuids.some(item => item[uuid])){
@@ -60,17 +83,22 @@ module.exports = {
         "fields": [
           {
             "name": "**Catacombs Level**",
-            "value": data.catacombs,
+            "value": catacombs,
             "inline": true
           },
           {
             "name": "**Floor 7 S+ PB**",
-            "value": data.fastestTime,
+            "value": floor7,
+            "inline": true
+          },
+          {
+            "name": "**Master 6 S+ PB**",
+            "value": master6,
             "inline": true
           },
           {
             "name": "**Secrets**",
-            "value": data.secretsFound,
+            "value": secretsFound,
             "inline": true
           },
           {

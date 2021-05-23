@@ -147,6 +147,43 @@
           "secrets": "6244",
           "poll_end_date": "2021-05-06T15:00:08.577Z",
           "active": false
+        },
+        {
+          "poll_id": 4,
+          "username": "eznick",
+          "poll_message_id": "846086714623655957",
+          "poll_channel_id": "823378296787566672",
+          "votes_positive": [],
+          "votes_neutral": [],
+          "votes_negative": [],
+          "uuid": "92fea327-bc26-4e3d-8afe-5ffc83868624",
+          "poll_end_date": "2021-05-24T00:06:32.619Z",
+          "active": true
+        },
+        {
+          "poll_id": 5,
+          "username": "eznick",
+          "poll_message_id": "846087544440750131",
+          "poll_channel_id": "823378296787566672",
+          "votes_positive": [
+            "252517597155819520",
+            "382888587559174144"
+          ],
+          "votes_neutral": [
+            "239800573459824641"
+          ],
+          "votes_negative": [
+            "360534570040426507",
+            "439680264143110176",
+            "347884694408265729",
+            "497470684881092620",
+            "361589795463626762",
+            "494600353119993856",
+            "451180986345062410"
+          ],
+          "uuid": "92fea327-bc26-4e3d-8afe-5ffc83868624",
+          "poll_end_date": "2021-05-23T18:14:17.485Z",
+          "active": false
         }
       ]
     },
