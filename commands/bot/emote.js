@@ -30,7 +30,7 @@ module.exports = {
                 return message.channel.send(createErrorEmbed('Please enter a valid emote!'))
             }
             if(emotes.users[message.mentions.members.first().id].emotes.given_emotes.includes(args[3])){
-                return message.channel.send(args[2] +' already has this emote!')
+                return message.channel.send(createErrorEmbed(args[2] +' already has this emote!'))
             }
             emotes.users[message.mentions.members.first().id].emotes.given_emotes.push(args[3])
             fs.writeFileSync('./data/verified.json', JSON.stringify(emotes, null, 2))
@@ -51,7 +51,7 @@ module.exports = {
                 return message.channel.send(createErrorEmbed('Please enter a valid emote!'))
             }
             if(!emotes.users[message.mentions.members.first().id].emotes.given_emotes.includes(args[3])){
-                return message.channel.send(args[2] +' does not have this emote!')
+                return message.channel.send(createErrorEmbed(args[2] +' does not have this emote!'))
             }
             let index = emotes.users[message.mentions.members.first().id].emotes.given_emotes.indexOf(args[3])
             emotes.users[message.mentions.members.first().id].emotes.given_emotes.splice(index, 1)

@@ -13,7 +13,7 @@ module.exports = {
             let unlocked = emotes.users[message.author.id].emotes.unlocked_emotes
             let given = emotes.users[message.author.id].emotes.given_emotes
             let availableEmotes = unlocked.concat(given);
-            availableEmotes.removeDuplicates()
+            availableEmotes = availableEmotes.removeDuplicates()
             return message.channel.send(await createEmoteEmbed(availableEmotes, emotes.users[message.author.id]))
         }
     },
