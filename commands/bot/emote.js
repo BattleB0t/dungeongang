@@ -24,7 +24,7 @@ module.exports = {
             }
             let emotes = JSON.parse(fs.readFileSync('./data/verified.json'))
             if(!emotes.user_ids.includes(message.mentions.members.first().id)){
-                return message.channel.send(createErrorEmbed('This user has not yet verified with Dungeon Gang v2!'))
+                return message.channel.send(createErrorEmbed(`This user has not yet verified with Dungeon Gang v2! \n Verify by doing -update in <#${config.discord.update_channel}>`))
             }
             if(!hasUnicode(args[3])){
                 return message.channel.send(createErrorEmbed('Please enter a valid emote!'))
@@ -45,7 +45,7 @@ module.exports = {
             }
             let emotes = JSON.parse(fs.readFileSync('./data/verified.json'))
             if(!emotes.user_ids.includes(message.mentions.members.first().id)){
-                return message.channel.send(createErrorEmbed('This user has not yet verified with Dungeon Gang v2!'))
+                return message.channel.send(createErrorEmbed(`This user has not yet verified with Dungeon Gang v2! \n Verify by doing -update in <#${config.discord.update_channel}>`))
             }
             if(!hasUnicode(args[3])){
                 return message.channel.send(createErrorEmbed('Please enter a valid emote!'))
@@ -77,7 +77,7 @@ module.exports = {
             }
             let emotes = JSON.parse(fs.readFileSync('./data/verified.json'))
             if(!emotes.user_ids.includes(message.mentions.members.first().id)){
-                return message.channel.send(createErrorEmbed('This user has not yet verified with Dungeon Gang v2!'))
+                return message.channel.send(createErrorEmbed(`This user has not yet verified with Dungeon Gang v2! \n Verify by doing -update in <#${config.discord.update_channel}>`))
             }
             return message.channel.send(await createEmoteEmbed2(emotes.users[message.mentions.members.first().id]))
         }
