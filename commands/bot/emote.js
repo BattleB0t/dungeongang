@@ -7,10 +7,12 @@ module.exports = {
     name: 'emote',
     aliases: [],
     usage: 'emote give/take/list [@user] [emote]',
-    description: '',
+    description: '(admin+ only)',
     async execute(message, args, config, fs) {
-        if(!message.member.roles.cache.has(config.discord.admin_role) || !message.member.hasPermission('ADMINISTRATOR')){
-            return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
+        if (!message.member.isOwner()) {
+            if (!message.member.roles.cache.has(config.discord.admin_role) && !message.member.hasPermission('ADMINISTRATOR')) {
+                return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
+            }
         }
         if(!args[1]){
             return message.channel.send(createErrorEmbed('Incorrect usage!\nUsage: `emote give/take/list [@user] [:emote:]`'))
