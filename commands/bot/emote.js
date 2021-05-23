@@ -9,7 +9,7 @@ module.exports = {
     usage: 'emote give/take/list [@user] [emote]',
     description: '',
     async execute(message, args, config, fs) {
-        if(!message.member.roles.cache.has(config.discord.staff_role)){
+        if(!message.member.roles.cache.has(config.discord.admin_role) || !message.member.hasPermission('ADMINISTRATOR')){
             return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
         }
         if(!args[1]){
