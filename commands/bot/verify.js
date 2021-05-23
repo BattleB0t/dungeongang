@@ -62,18 +62,26 @@ module.exports = {
                 }
                 let cataLevel = catacombs.cataLevel
                 cataLevel = Math.floor(parseInt(cataLevel))
+                let changeIntoName = `❮${cataLevel}❯ ${username} ${DiscordEmoji}`
+                if (originalMessage.member.roles.cache.find(role => role.id === config.discord.staff_role)) {
+                    Object.keys(config.discord.staff_ranks).forEach(rank => {
+                        if (originalMessage.member.roles.cache.has(rank)) {
+                            changeIntoName = changeIntoName.replace(/[❮❯]/g, config.discord.staff_ranks[rank])
+                        }
+                    })
+                }
                 originalMessage.member.giveCorrectCataRole(cataLevel)
                 if (verified.user_ids.includes(originalMessage.member.id)) {
                     message.edit(createSuccessEmbed('You are already verified, giving member role...'))
                     try {
-                        await originalMessage.member.setNickname(`❮${cataLevel}❯ ${username}`)
+                        await originalMessage.member.setNickname(changeIntoName)
                     } catch (e) { console.log(e) }
                     console.log(config.discord.member_role)
                     await originalMessage.member.roles.add(config.discord.member_role)
                     return;
                 }
                 try {
-                    await originalMessage.member.setNickname(`❮${cataLevel}❯ ${username}`)
+                    await originalMessage.member.setNickname(changeIntoName)
                 } catch (e) { console.log(e) }
                 await originalMessage.member.roles.add(config.discord.member_role)
                 verified.users[originalMessage.member.id] = {

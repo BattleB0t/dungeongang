@@ -282,6 +282,19 @@ Discord.GuildMember.prototype.updateSlot = function (roleID, slot) {
   }
 }
 
+Discord.GuildMember.prototype.hasEquipped = function (emote) {
+  currentEmoteList = JSON.parse(fs.readFileSync('./data/verified.json'))
+  let slots = currentEmoteList.users[this.user.id].emotes.slots
+  let slots2 = Object.keys(currentEmoteList.users[this.user.id].emotes.slots)
+  for (let i = 0; i < slots2.length; i++){
+    let slot = Object.keys(currentEmoteList.users[this.user.id].emotes.slots)[i]
+    if (slots[slot].includes(emote)){
+      return true
+    }
+  }
+  return false
+}
+
 global.updateAvailableEmotes = async function (message) {
   currentEmoteList = JSON.parse(fs.readFileSync('./data/verified.json'))
 
@@ -322,7 +335,7 @@ global.createEmoteEmbed = async function(emotes, user) {
   let embed = new Discord.MessageEmbed()
     .setTitle('**__Slots__**')
     .setColor('0x00bfff')
-    .setAuthor(await getIGN(user.uuid)+'\'s Emotes', `https://mc-heads.net/avatar/"${user.uuid}`)
+    .setAuthor(await getIGN(user.uuid)+'\'s Emotes', `https://mc-heads.net/avatar/${user.uuid}`)
 
   Object.keys(user.emotes.slots).forEach(slot => {
     switch(slot) {
@@ -357,10 +370,9 @@ global.createEmoteEmbed = async function(emotes, user) {
     }
   })
   if(emotes.length == 0){
-    embed.addField('Emotes', 'You have no emotes :(', false)
+    embed.addField('**Available Emotes**', 'You have no emotes :(', false)
   }else{
-    embed.addField('Emotes', '`'+ emotes.join(' ') +'`', false)
+    embed.addField('**Available Emotes**', '`'+ emotes.join(' ') +'`', false)
   }
-  embed.addField(`Total Slots`, slots)
   return embed
 }

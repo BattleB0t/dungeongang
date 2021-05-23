@@ -3,16 +3,21 @@
     "343129897360949248",
     "347884694408265729",
     "363199691946459136",
-    "382888587559174144"
+    "382888587559174144",
+    "167321409599569920"
   ],
   "users": {
     "343129897360949248": {
       "uuid": "b9d90392-1240-48bb-993f-8f1b836657a8",
       "emotes": {
-        "unlocked_emotes": [],
+        "unlocked_emotes": [
+          "★",
+          "⭐"
+        ],
         "given_emotes": [],
         "slots": {
-          "default": "none"
+          "default": "none",
+          "staff": "none"
         }
       }
     },
@@ -26,15 +31,18 @@
           "💛",
           "🎉",
           "🤑",
-          "💜"
+          "💜",
+          "💬",
+          "💚"
         ],
         "given_emotes": [],
         "slots": {
-          "default": "none",
+          "default": "★",
           "staff": "none",
           "vc500": "none",
           "g_god": "none",
-          "booster": "none"
+          "booster": "none",
+          "msg100k": "none"
         }
       }
     },
@@ -51,6 +59,20 @@
     },
     "382888587559174144": {
       "uuid": "358b339a910e423e9cfe7a62a26d4ac1",
+      "emotes": {
+        "unlocked_emotes": [
+          "★",
+          "⭐"
+        ],
+        "given_emotes": [],
+        "slots": {
+          "default": "none",
+          "staff": "none"
+        }
+      }
+    },
+    "167321409599569920": {
+      "uuid": "df3c3499fa2f4ca2b7ca59fb237260ef",
       "emotes": {
         "unlocked_emotes": [
           "★",

@@ -21,7 +21,6 @@ for (const folder of commandFolders) {
 }
 
 client.on('ready', async () => {
-    console.log(client.commands);
     console.log(`Starting Dungeon Gang Bot v1.0.0`);
     client.user.setActivity(`Nice PB Kid`, {
         type: 'PLAYING'
@@ -38,6 +37,7 @@ client.on('message', async (message) => {
     if (!command) return;
     if (!message.guild) return;
     if (message.author.bot) return;
+    if (!message.member.roles.cache.has(config.discord.staff_role)) return;
     if (!message.content.startsWith(prefix)) return;
     if (command == 'help'){
         command.execute(message, cmdargs, config, fs)
