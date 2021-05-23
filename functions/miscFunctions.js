@@ -272,6 +272,16 @@ Discord.GuildMember.prototype.updateEmote = function (roleID, emote, conditionRo
   } else if (!this.roles.cache.has(roleID) && currentEmoteList.users[this.user.id].emotes.unlocked_emotes.includes(emote)) {
     let pos = currentEmoteList.users[this.user.id].emotes.unlocked_emotes.indexOf(emote)
     currentEmoteList.users[this.user.id].emotes.unlocked_emotes.splice(pos, 1)
+    if (this.hasEquipped(emote, currentEmoteList)) {
+      let slots = currentEmoteList.users[this.user.id].emotes.slots
+      let slots2 = Object.keys(currentEmoteList.users[this.user.id].emotes.slots)
+      for (let i = 0; i < slots2.length; i++){
+        let slot = Object.keys(currentEmoteList.users[this.user.id].emotes.slots)[i]
+        if (slots[slot].includes(emote)){
+          slots[slot] = 'none'
+        }
+      }
+    }
   }
 }
 
@@ -283,12 +293,11 @@ Discord.GuildMember.prototype.updateSlot = function (roleID, slot) {
   }
 }
 
-Discord.GuildMember.prototype.hasEquipped = function (emote) {
-  currentEmoteList = JSON.parse(fs.readFileSync('./data/verified.json'))
-  let slots = currentEmoteList.users[this.user.id].emotes.slots
-  let slots2 = Object.keys(currentEmoteList.users[this.user.id].emotes.slots)
+Discord.GuildMember.prototype.hasEquipped = function (emote, emotes) {
+  let slots = emotes.users[this.user.id].emotes.slots
+  let slots2 = Object.keys(emotes.users[this.user.id].emotes.slots)
   for (let i = 0; i < slots2.length; i++){
-    let slot = Object.keys(currentEmoteList.users[this.user.id].emotes.slots)[i]
+    let slot = Object.keys(emotes.users[this.user.id].emotes.slots)[i]
     if (slots[slot].includes(emote)){
       return true
     }
@@ -303,7 +312,7 @@ Discord.GuildMember.prototype.getEmotes = function () {
   let emotes = []
   for (let i = 0; i < slots2.length; i++) {
     let slot = Object.keys(currentEmoteList.users[this.user.id].emotes.slots)[i]
-    if (!slots[slot] != 'none') {
+    if (slots[slot] != 'none') {
       emotes.push(slots[slot])
     }
   }
@@ -315,6 +324,7 @@ global.updateAvailableEmotes = async function (message) {
 
   message.member.updateEmote(config.discord.tpPlus_role, "★")
   message.member.updateEmote(config.discord.subFour_role, "⭐", config.discord.tpPlus_role)
+  message.member.updateEmote(config.discord.tpPlus_role, "⭐", config.discord.subFour_role)
   message.member.updateEmote(config.discord.booster, "💜")
   message.member.updateEmote(config.discord.msg_100k, "💬")
   message.member.updateEmote(config.discord.msg_250k, "💚")
@@ -357,31 +367,31 @@ global.createEmoteEmbed = async function(emotes, user) {
     switch(slot) {
       case 'default':
         slots++
-        embed.addField(slots +': **Default**', user.emotes.slots[slot], true)
+        embed.addField(slots +': **Default**', '`'+ user.emotes.slots[slot] +'`', true)
         break;
       case 'vc500':
         slots++
-        embed.addField(slots +': **VC Nolife**', user.emotes.slots[slot], true)
+        embed.addField(slots +': **VC Nolife**', '`'+ user.emotes.slots[slot] +'`', true)
         break;
       case 'booster':
         slots++
-        embed.addField(slots +': **Booster**', user.emotes.slots[slot], true)
+        embed.addField(slots +': **Booster**', '`'+ user.emotes.slots[slot] +'`', true)
         break;
       case 'msg100k':
         slots++
-        embed.addField(slots +': **100k Msg**', user.emotes.slots[slot], true)
+        embed.addField(slots +': **100k Msg**', '`'+ user.emotes.slots[slot] +'`', true)
         break;
       case 'g_god':
         slots++
-        embed.addField(slots +': **Giveaway God**', user.emotes.slots[slot], true)
+        embed.addField(slots +': **Giveaway God**', '`'+ user.emotes.slots[slot] +'`', true)
         break;
       case 'staff':
         slots++
-        embed.addField(slots +': **Staff**', user.emotes.slots[slot], true)
+        embed.addField(slots +': **Staff**', '`'+ user.emotes.slots[slot] +'`', true)
         break;
       case 'extra':
         slots++
-        embed.addField(slots +': **Extra Slot**', user.emotes.slots[slot], true)
+        embed.addField(slots +': **Extra Slot**', '`'+ user.emotes.slots[slot] +'`', true)
         break;
     }
   })

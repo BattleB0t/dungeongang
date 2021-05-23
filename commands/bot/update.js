@@ -69,10 +69,13 @@ module.exports = {
                 cataLevel = parseInt(cataLevel).toFixed(0)
                 let DiscordEmoji = ''
                 if(verified.user_ids.includes(originalMessage.author.id)){
-                    let DiscordEmoji = originalMessage.member.getEmotes().join('').catch(e => {
-                        console.log(e)
+                    try{
+                        DiscordEmoji = originalMessage.member.getEmotes()
+                        DiscordEmoji = DiscordEmoji.join('')
+                    }catch(error){
+                        console.log(error)
                         DiscordEmoji = ''
-                    })
+                    }
                 }
                 originalMessage.member.giveCorrectCataRole(cataLevel)
                 let changeIntoName = `❮${cataLevel}❯ ${username} ${DiscordEmoji}`

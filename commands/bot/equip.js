@@ -16,11 +16,8 @@ module.exports = {
         let slots = emotes.users[message.author.id].emotes.slots
         await updateAvailableEmotes(message)
         await updateAvailableSlots(message)
-        if(message.member.hasEquipped(args[1])){
+        if(message.member.hasEquipped(args[1], emotes)){
             return message.channel.send(createErrorEmbed('You already have this emote equipped!'))
-        }
-        if(!unlocked.includes(args[1]) && !given.includes(args[1])){
-            return message.channel.send(createErrorEmbed('You have not unlocked this emote!'))
         }
         if(isNaN(parseInt(args[2]))){
             return message.channel.send(createErrorEmbed('Please enter a valid slot number.'))
@@ -32,8 +29,22 @@ module.exports = {
         if(slots[slot] != 'none'){
             return message.channel.send(createErrorEmbed('This slot already has an emote!'))
         }
+        if(slot == 'staff'){
+            function hasUnicode(s) {
+                return /[^\u0000-\u007f]/.test(s);
+            }
+            if(!hasUnicode(args[1])){
+                return message.channel.send(createErrorEmbed('Please enter a valid emote!'))
+            }
+            slots[slot] = args[1]
+            fs.writeFileSync('./data/verified.json', JSON.stringify(emotes, null, 2))
+            return message.channel.send(createSuccessEmbed(`Successfully equipped \`${args[1]}\` in slot **#${args[2]}**`))
+        }
+        if(!unlocked.includes(args[1]) && !given.includes(args[1])){
+            return message.channel.send(createErrorEmbed('You have not unlocked this emote!'))
+        }
         slots[slot] = args[1]
         fs.writeFileSync('./data/verified.json', JSON.stringify(emotes, null, 2))
-        return message.channel.send(createSuccessEmbed(`Successfully equipped ${args[1]} in slot **#${args[2]}**`))
+        return message.channel.send(createSuccessEmbed(`Successfully equipped \`${args[1]}\` in slot **#${args[2]}**`))
     },
 };

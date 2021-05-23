@@ -26,12 +26,14 @@
       "emotes": {
         "unlocked_emotes": [
           "🔊",
-          "💛",
           "🎉",
           "🤑",
           "💜",
           "💬",
-          "💚"
+          "💚",
+          "💛",
+          "★",
+          "⭐"
         ],
         "given_emotes": [],
         "slots": {
@@ -64,8 +66,8 @@
         ],
         "given_emotes": [],
         "slots": {
-          "default": "none",
-          "staff": "none"
+          "default": "⭐",
+          "staff": "🐱"
         }
       }
     },
