@@ -7,6 +7,7 @@ module.exports = {
     usage: 'verify [username]',
     description: 'Verifies and links your minecraft account to your discord account',
     async execute(message, args, config, fs) {
+        if (message.channel.id !== config.discord.verification_channel && message.channel.id !== config.discord.staff_commands) { return; }
         let verified = JSON.parse(fs.readFileSync('./data/verified.json'))
         message.delete()
         let tag = message.member.user.tag
@@ -14,9 +15,6 @@ module.exports = {
         let originalMessage = message
         if (!args[1]) {
             return message.channel.sendError('invalid usage, do -verify [IGN]')
-        }
-        if (message.channel.id != config.discord.verification_channel) {
-            return message.channel.sendError('Please use this command in <#' + config.discord.verification_channel + '>')
         }
         if (message.member.roles.cache.find(r => r.id === config.discord.member_role) && verified.user_ids.includes(message.author.id)) {
             return message.channel.sendError('You are already verified!')
