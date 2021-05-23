@@ -6,6 +6,7 @@ module.exports = {
     usage: 'update [username]',
     description: 'Updates your catacombs level and emotes',
     async execute(message, args, config, fs) {
+        if (message.channel.id !== config.discord.update_channel && message.channel.id !== config.discord.staff_commands) { return; }
         message.delete()
         let verified = JSON.parse(fs.readFileSync('./data/verified.json'))
         let username
