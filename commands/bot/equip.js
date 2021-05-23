@@ -9,7 +9,7 @@ module.exports = {
         }
         let verified = JSON.parse(fs.readFileSync('./data/verified.json'))
         if(!verified.user_ids.includes(message.author.id)){
-            return message.channel.send(createErrorEmbed('You have not yet verified with Dungeon Gang v2!'))
+            return message.channel.send(createErrorEmbed(`This user has not yet verified with Dungeon Gang v2! \n Verify by doing -update in <#${config.discord.update_channel}>`))
         }
         await updateAvailableEmotes(message)
         await updateAvailableSlots(message)
