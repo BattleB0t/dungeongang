@@ -272,7 +272,7 @@ Discord.GuildMember.prototype.updateEmote = function (roleID, emote, conditionRo
   } else if (!this.roles.cache.has(roleID) && currentEmoteList.users[this.user.id].emotes.unlocked_emotes.includes(emote)) {
     let pos = currentEmoteList.users[this.user.id].emotes.unlocked_emotes.indexOf(emote)
     currentEmoteList.users[this.user.id].emotes.unlocked_emotes.splice(pos, 1)
-    if (this.hasEquipped(emote, currentEmoteList)) {
+    if (this.hasEquipped(emote, currentEmoteList) && !currentEmoteList.users[this.user.id].emotes.given_emotes.includes(emote)) {
       let slots = currentEmoteList.users[this.user.id].emotes.slots
       let slots2 = Object.keys(currentEmoteList.users[this.user.id].emotes.slots)
       for (let i = 0; i < slots2.length; i++){
@@ -399,6 +399,58 @@ global.createEmoteEmbed = async function(emotes, user) {
     embed.addField('**Available Emotes**', 'You have no emotes :(', false)
   }else{
     embed.addField('**Available Emotes**', '`'+ emotes.join(' ') +'`', false)
+  }
+  return embed
+}
+
+global.createEmoteEmbed2 = async function(user) { 
+  let slots = 0
+  let embed = new Discord.MessageEmbed()
+    .setTitle('**__Slots__**')
+    .setColor('0x00bfff')
+    .setAuthor(await getIGN(user.uuid)+'\'s Emotes', `https://mc-heads.net/avatar/${user.uuid}`)
+
+  Object.keys(user.emotes.slots).forEach(slot => {
+    switch(slot) {
+      case 'default':
+        slots++
+        embed.addField(slots +': **Default**', '`'+ user.emotes.slots[slot] +'`', true)
+        break;
+      case 'vc500':
+        slots++
+        embed.addField(slots +': **VC Nolife**', '`'+ user.emotes.slots[slot] +'`', true)
+        break;
+      case 'booster':
+        slots++
+        embed.addField(slots +': **Booster**', '`'+ user.emotes.slots[slot] +'`', true)
+        break;
+      case 'msg100k':
+        slots++
+        embed.addField(slots +': **100k Msg**', '`'+ user.emotes.slots[slot] +'`', true)
+        break;
+      case 'g_god':
+        slots++
+        embed.addField(slots +': **Giveaway God**', '`'+ user.emotes.slots[slot] +'`', true)
+        break;
+      case 'staff':
+        slots++
+        embed.addField(slots +': **Staff**', '`'+ user.emotes.slots[slot] +'`', true)
+        break;
+      case 'extra':
+        slots++
+        embed.addField(slots +': **Extra Slot**', '`'+ user.emotes.slots[slot] +'`', true)
+        break;
+    }
+  })
+  if(user.emotes.unlocked_emotes.length == 0){
+    embed.addField('**Unlocked Emotes**', 'This person has no emotes :(', false)
+  }else{
+    embed.addField('**Unlocked Emotes**', '`'+ user.emotes.unlocked_emotes.join(' ') +'`', false)
+  }
+  if(user.emotes.given_emotes.length == 0){
+    embed.addField('**Given Emotes**', 'This person has no emotes :(', false)
+  }else{
+    embed.addField('**Given Emotes**', '`'+ user.emotes.given_emotes.join(' ') +'`', false)
   }
   return embed
 }

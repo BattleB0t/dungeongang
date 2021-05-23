@@ -27,7 +27,6 @@
         "unlocked_emotes": [
           "🔊",
           "🎉",
-          "🤑",
           "💜",
           "💬",
           "💚",
@@ -35,12 +34,13 @@
           "★",
           "⭐"
         ],
-        "given_emotes": [],
+        "given_emotes": [
+          "🤑"
+        ],
         "slots": {
-          "default": "none",
+          "default": "🤑",
           "staff": "none",
           "vc500": "none",
-          "g_god": "none",
           "booster": "none",
           "msg100k": "none"
         }
