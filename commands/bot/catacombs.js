@@ -5,7 +5,8 @@ module.exports = {
     aliases: ['cata', 'c', 'check', 'dungeons', 'd'],
     usage: 'check [username]',
     description: 'Command to check if a player meets top player/top player+ requirements',
-    async execute(message, args, config, fs) {
+    async execute() {
+        let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         let username;
         /*if (!message.member.roles.cache.has(config.discord.staff_role)) {
             return message.channel.send(createErrorEmbed('This command is not available to non-staff yet!'))
