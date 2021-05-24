@@ -3,7 +3,8 @@ module.exports = {
     aliases: [],
     usage: 'unequip [all/slot]',
     description: 'Unequips your emotes',
-    async execute(message, args, config, fs) {
+    async execute() {
+        let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if(!args[1]){
             return message.channel.send(createErrorEmbed('Incorrect Usage!\nUsage: `unequip [all/slot]`'))
         }
@@ -25,6 +26,10 @@ module.exports = {
                 }
             }
             fs.writeFileSync('./data/verified.json', JSON.stringify(emotes, null, 2))
+            let changeIntoName = message.member.nickname
+            let nameSplit = changeIntoName.split(" ")
+            changeIntoName = `${nameSplit[0]} ${nameSplit[1]}`
+            await message.member.setNickname(changeIntoName)
             return message.channel.send(createSuccessEmbed('Successfully unequipped all of your emotes!'))
         }
         if(isNaN(parseInt(args[1]))){
@@ -39,6 +44,12 @@ module.exports = {
         }
         slots[slot] = 'none'
         fs.writeFileSync('./data/verified.json', JSON.stringify(emotes, null, 2))
+        let DiscordEmoji = message.member.getEmotes()
+        DiscordEmoji = DiscordEmoji.join('')
+        let changeIntoName = message.member.nickname
+        let nameSplit = changeIntoName.split(" ")
+        changeIntoName = `${nameSplit[0]} ${nameSplit[1]} ${DiscordEmoji}`
+        await message.member.setNickname(changeIntoName)
         return message.channel.send(createSuccessEmbed('Successfully unequipped slot **#'+ args[1] +'**'))
     },
 };
