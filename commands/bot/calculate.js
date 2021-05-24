@@ -62,7 +62,8 @@ module.exports = {
     aliases: ['calc'],
     usage: 'calculate level',
     description: 'Calculates xp required for the catacombs levels specified',
-    async execute(message, args, config, fs) {
+    async execute() {
+        let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if (args.length > 2) {
             args[1] = parseInt(args[1])
             args[2] = parseInt(args[2])
