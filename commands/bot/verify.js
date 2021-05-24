@@ -6,7 +6,8 @@ module.exports = {
     aliases: [],
     usage: 'verify [username]',
     description: 'Verifies and links your minecraft account to your discord account',
-    async execute(message, args, config, fs) {
+    async execute() {
+        let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if (message.channel.id !== config.discord.verification_channel && message.channel.id !== config.discord.staff_commands) { return; }
         let verified = JSON.parse(fs.readFileSync('./data/verified.json'))
         message.delete()
