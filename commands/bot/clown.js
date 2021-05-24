@@ -6,7 +6,8 @@ module.exports = {
     aliases: [],
     usage: 'clown add/remove [username]',
     description: 'Adds/removes a user from the clown list',
-    async execute(message, args, config, fs) {
+    async execute() {
+        let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if(!message.member.roles.cache.has(config.discord.staff_role)){
             return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
         }
