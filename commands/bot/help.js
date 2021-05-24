@@ -10,7 +10,8 @@ module.exports = {
     aliases: ['h', 'info', `commands`],
     usage: 'help [command]',
     description: 'Gets information about the bot',
-    execute(message, args, config, fs) {
+    async execute() {
+        let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         // console.log(args)
         if (args.length === 1) {
             const commandFolders = fs.readdirSync('./commands');
