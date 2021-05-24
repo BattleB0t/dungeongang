@@ -5,7 +5,8 @@ module.exports = {
     aliases: [],
     usage: 'unverify <@person>',
     description: 'unverifies a person (admin+ only)',
-    async execute(message, args, config, fs) {
+    async execute() {
+        let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if (!message.member.isOwner()) {
             if (!message.member.roles.cache.has(config.discord.admin_role) && !message.member.hasPermission('ADMINISTRATOR')) {
                 return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
