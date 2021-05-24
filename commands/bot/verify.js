@@ -60,7 +60,7 @@ module.exports = {
                 }
                 let cataLevel = catacombs.cataLevel
                 cataLevel = Math.floor(parseInt(cataLevel))
-                let changeIntoName = `❮${cataLevel}❯ ${username} ${DiscordEmoji}`
+                let changeIntoName = `❮${cataLevel}❯ ${username}`
                 if (originalMessage.member.roles.cache.find(role => role.id === config.discord.staff_role)) {
                     Object.keys(config.discord.staff_ranks).forEach(rank => {
                         if (originalMessage.member.roles.cache.has(rank)) {
@@ -96,6 +96,8 @@ module.exports = {
                 verified.user_ids.push(originalMessage.member.id)
                 fs.writeFileSync('./data/verified.json', JSON.stringify(verified, null, 2))
                 message.edit(createSuccessEmbed(`Verified as **${username}** with catacombs level **${cataLevel}**!`));
+                await updateAvailableEmotes(originalMessage)
+                await updateAvailableSlots(originalMessage)
                 await sleep(15000)
                 return message.delete()
             })

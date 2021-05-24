@@ -36,7 +36,6 @@ client.on('message', async (message) => {
     if (!command) return;
     if (!message.guild) return;
     if (message.author.bot) return;
-    if (!message.member.roles.cache.has(config.discord.staff_role)) return;
     if (!message.content.startsWith(prefix)) return;
     if (command == 'help'){
         command.execute(message, cmdargs, config, fs)

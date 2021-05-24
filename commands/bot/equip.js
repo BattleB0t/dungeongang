@@ -39,13 +39,13 @@ module.exports = {
             }
             slots[slot] = args[1]
             fs.writeFileSync('./data/verified.json', JSON.stringify(emotes, null, 2))
-            return message.channel.send(createSuccessEmbed(`Successfully equipped \`${args[1]}\` in slot **#${args[2]}**`))
+            return message.channel.send(createSuccessEmbed(`Successfully equipped \`${args[1]}\` in slot **#${args[2]}**\nDo -update in <#744850191550775357> to receive your emote`))
         }
         if(!unlocked.includes(args[1]) && !given.includes(args[1])){
             return message.channel.send(createErrorEmbed('You have not unlocked this emote!'))
         }
         slots[slot] = args[1]
         fs.writeFileSync('./data/verified.json', JSON.stringify(emotes, null, 2))
-        return message.channel.send(createSuccessEmbed(`Successfully equipped \`${args[1]}\` in slot **#${args[2]}**`))
+        return message.channel.send(createSuccessEmbed(`Successfully equipped \`${args[1]}\` in slot **#${args[2]}**\nDo -update in <#744850191550775357> to receive your emote`))
     },
 };

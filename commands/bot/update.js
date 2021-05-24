@@ -37,6 +37,7 @@ module.exports = {
                 if (uuid == 'invalid player') {
                     return message.editError('This player does not exist!')
                 }
+                username = await getIGN(uuid)
                 let data = await getSecretCountCataDiscord(uuid)
                     .catch(error => {
                         if(!error.isAxiosError) {
@@ -48,16 +49,10 @@ module.exports = {
                         message.edit(createErrorEmbed(errorMessage))
                         throw error
                     })
+                let cataLevel = 0
                 let catacombs = await getCataAndPb(uuid)
                     .catch(error => {
-                        if(!error.isAxiosError) {
-                            message.edit(createErrorEmbed(error))
-                            throw error
-                        }
-                        console.log('axios error')
-                        let errorMessage = error.response.data.cause
-                        message.edit(createErrorEmbed(errorMessage))
-                        throw error
+                        cataLevel = undefined
                     })
                 let linkedDiscord = data.discord
                 if (linkedDiscord === "Api throttle") { return message.editError('API Throttle: Please try again later.') }
@@ -66,7 +61,11 @@ module.exports = {
                 } else if (linkedDiscord != tag) {
                     return message.editError('That minecraft account is connected to a different discord!')
                 }
-                let cataLevel = catacombs.cataLevel
+                if(cataLevel === undefined){
+                    cataLevel = 0
+                }else{
+                    cataLevel = catacombs.cataLevel
+                }
                 cataLevel = parseInt(cataLevel).toFixed(0)
                 let DiscordEmoji = ''
                 if(verified.user_ids.includes(originalMessage.author.id)){
@@ -107,6 +106,8 @@ module.exports = {
 
                 // console.log(changeIntoName)
                 message.edit(createSuccessEmbed(`Updated <@${originalMessage.member.id}> to catacombs level ${cataLevel}!`));
+                await updateAvailableEmotes(originalMessage)
+                await updateAvailableSlots(originalMessage)
                 await sleep(15000)
                 return message.delete()
             })

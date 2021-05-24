@@ -401,7 +401,7 @@ global.createEmoteEmbed = async function(emotes, user) {
   if(emotes.length == 0){
     embed.addField('**Available Emotes**', 'You have no emotes :(', false)
   }else{
-    embed.addField('**Available Emotes**', '`'+ emotes.join(' ') +'`', false)
+    embed.addField('**Available Emotes**', '`'+ emotes.join(' ') +'`\nUse -equip [:emote:] [slot #] to equip emotes', false)
   }
   return embed
 }

@@ -111,8 +111,19 @@ module.exports = {
                         })
                     if (response === "Api throttle") { return message.edit(createErrorEmbed("API Throttle: Please try again later.")) }
                     let cataXp = -1;
-
-                    for (let i = 0; i < response.profiles.length; i++) {
+                    try{
+                        var profiles = response.profiles.length
+                    }catch(error){
+                        if(!error.isAxiosError) {
+                            newMessage.edit(createErrorEmbed(error))
+                            throw error
+                        }
+                        console.log('axios error')
+                        let errorMessage = error.response.data.cause
+                        newMessage.edit(createErrorEmbed(errorMessage))
+                        throw error
+                    }
+                    for (let i = 0; i < profiles; i++) {
                         if (response?.profiles[i]?.members[uuid]?.dungeons || false) {
                             if (response.profiles[i].members[uuid].dungeons.dungeon_types.catacombs.experience > cataXp) {
                                 cataXp = response.profiles[i].members[uuid].dungeons.dungeon_types.catacombs.experience;
@@ -123,7 +134,7 @@ module.exports = {
                     collectiveXp = dungeoneering_xp[args[1]] - cataXp
 
                     if (collectiveXp < 0) {
-                        return newMessage.edit(`You have already reached this catacombs level!`)
+                        return newMessage.edit(createErrorEmbed(`You have already reached this catacombs level!`))
                     }
                     collectiveXp = numberWithCommas(collectiveXp)
 
