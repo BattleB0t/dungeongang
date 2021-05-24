@@ -3,11 +3,11 @@ const fs = require('fs')
 const config = require('../data/config.json')
 let polls = JSON.parse(fs.readFileSync('./data/polled_users.json'))
 
-global.sleep = function (ms) {
+globalThis.sleep = function (ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-global.createErrorEmbed = function createErrorEmbed(error) {
+globalThis.createErrorEmbed = function createErrorEmbed(error) {
   let error_embed = new Discord.MessageEmbed()
     .setColor('0x00bfff')
     .setTitle('<:no:838802013541498890> Error')
@@ -27,7 +27,7 @@ Discord.Message.prototype.editError = async function (error) {
   await sleep(20000)
   this.delete()
 }
-global.createSuccessEmbed = function createSuccessEmbed(success) {
+globalThis.createSuccessEmbed = function createSuccessEmbed(success) {
   let success_embed = new Discord.MessageEmbed()
     .setColor('0x00bfff')
     .setTitle('<:yes:838801988241588304> Success')
@@ -35,7 +35,7 @@ global.createSuccessEmbed = function createSuccessEmbed(success) {
   return success_embed
 }
 
-global.getPoll = function (message_id) {
+globalThis.getPoll = function (message_id) {
   polls = JSON.parse(fs.readFileSync('./data/polled_users.json'))
   for (let i = 0; i < polls.uuids.length; i++) {
     let uuid = Object.keys(polls.uuids[i])[0]
@@ -47,7 +47,7 @@ global.getPoll = function (message_id) {
   }
 }
 
-global.writePoll = function (message_id, user_id, rating) {
+globalThis.writePoll = function (message_id, user_id, rating) {
   polls = JSON.parse(fs.readFileSync('./data/polled_users.json'))
   for (let i = 0; i < polls.uuids.length; i++) {
     let uuid = Object.keys(polls.uuids[i])[0]
@@ -81,7 +81,7 @@ global.writePoll = function (message_id, user_id, rating) {
   }
 }
 
-global.unWritePoll = function (message_id, user_id, rating) {
+globalThis.unWritePoll = function (message_id, user_id, rating) {
   polls = JSON.parse(fs.readFileSync('./data/polled_users.json'))
   for (let i = 0; i < polls.uuids.length; i++) {
     let uuid = Object.keys(polls.uuids[i])[0]
@@ -107,7 +107,7 @@ global.unWritePoll = function (message_id, user_id, rating) {
   }
 }
 
-global.checkExpiredPolls = async function () {
+globalThis.checkExpiredPolls = async function () {
   checkPoll = async function (message_id) {
     let now = new Date()
     if (!getPoll(message_id)) {
@@ -123,7 +123,7 @@ global.checkExpiredPolls = async function () {
   polls.active_polls.forEach(await checkPoll)
 }
 
-global.endActivePoll = async function (message_id) {
+globalThis.endActivePoll = async function (message_id) {
   let now = new Date()
   if (!getPoll(message_id)) {
     return 'invalid poll'
@@ -138,7 +138,7 @@ global.endActivePoll = async function (message_id) {
   return 'success'
 }
 
-global.createPollEndedEmbed = function (json) {
+globalThis.createPollEndedEmbed = function (json) {
   let PollEndedEmbed = {
     "color": 5675786,
     "footer": {
@@ -189,7 +189,7 @@ global.createPollEndedEmbed = function (json) {
   return PollEndedEmbed
 }
 
-global.getPollInProgressEmbed = function (json) {
+globalThis.getPollInProgressEmbed = function (json) {
   let end_date = new Date(Date.parse(json.poll_end_date))
   console.log(end_date.toLocaleString().toString())
   let PollInProgressEmbed = {
@@ -253,23 +253,35 @@ function getIndex(uuid) {
 Discord.GuildMember.prototype.giveCorrectCataRole = async function (cataLevel) {
   let ObjectValues = Object.values(config.discord.cata_roles)
   await this.roles.remove(this.roles.cache.filter(role => ObjectValues.includes(role.id)))
+  let correctCataRole = ""
   if (cataLevel > 29) {
     if (cataLevel < 35) {
-      this.roles.add(config.discord.cata_roles["30+"])
+      correctCataRole = config.discord.cata_roles["30+"]
     } else {
       if (this.roles.cache.find(role => role.id === config.discord.normalTp_role) && cataLevel > 37) {
-        this.roles.add(config.discord.cata_roles[cataLevel.toString()])
+        correctCataRole = config.discord.cata_roles[cataLevel.toString()]
       } else {
-        this.roles.add(config.discord.cata_roles["35+"])
+        correctCataRole = config.discord.cata_roles["35+"]
       }
+    }
+  }
+  if (correctCataRole !== "") {
+    try {
+      this.roles.add(correctCataRole)
+    } catch (e) { console.log(e) }
+    await sleep(5000)
+    if (!this.roles.cache.has(correctCataRole)) {
+      try {
+        this.roles.add(correctCataRole)
+      } catch (e) { console.log(e) }
     }
   }
 }
 
-global.currentEmoteList = JSON.parse(fs.readFileSync('./data/verified.json'))
+globalThis.currentEmoteList = JSON.parse(fs.readFileSync('./data/verified.json'))
 
 Discord.GuildMember.prototype.updateEmote = function (roleID, emote, conditionRole = true) {
-  if (conditionRole !== true) {conditionRole = this.roles.cache.has(conditionRole)}
+  if (conditionRole !== true) { conditionRole = this.roles.cache.has(conditionRole) }
   if (this.roles.cache.has(roleID) && !currentEmoteList.users[this.user.id].emotes.unlocked_emotes.includes(emote) && conditionRole) {
     currentEmoteList.users[this.user.id].emotes.unlocked_emotes.push(emote)
   } else if (!this.roles.cache.has(roleID) && currentEmoteList.users[this.user.id].emotes.unlocked_emotes.includes(emote)) {
@@ -278,9 +290,9 @@ Discord.GuildMember.prototype.updateEmote = function (roleID, emote, conditionRo
     if (this.hasEquipped(emote, currentEmoteList) && !currentEmoteList.users[this.user.id].emotes.given_emotes.includes(emote)) {
       let slots = currentEmoteList.users[this.user.id].emotes.slots
       let slots2 = Object.keys(currentEmoteList.users[this.user.id].emotes.slots)
-      for (let i = 0; i < slots2.length; i++){
+      for (let i = 0; i < slots2.length; i++) {
         let slot = Object.keys(currentEmoteList.users[this.user.id].emotes.slots)[i]
-        if (slots[slot].includes(emote)){
+        if (slots[slot].includes(emote)) {
           slots[slot] = 'none'
         }
       }
@@ -299,9 +311,9 @@ Discord.GuildMember.prototype.updateSlot = function (roleID, slot) {
 Discord.GuildMember.prototype.hasEquipped = function (emote, emotes) {
   let slots = emotes.users[this.user.id].emotes.slots
   let slots2 = Object.keys(emotes.users[this.user.id].emotes.slots)
-  for (let i = 0; i < slots2.length; i++){
+  for (let i = 0; i < slots2.length; i++) {
     let slot = Object.keys(emotes.users[this.user.id].emotes.slots)[i]
-    if (slots[slot].includes(emote)){
+    if (slots[slot].includes(emote)) {
       return true
     }
   }
@@ -322,7 +334,7 @@ Discord.GuildMember.prototype.getEmotes = function () {
   return emotes
 }
 
-global.updateAvailableEmotes = async function (message) {
+globalThis.updateAvailableEmotes = async function (message) {
   currentEmoteList = JSON.parse(fs.readFileSync('./data/verified.json'))
 
   message.member.updateEmote(config.discord.tpPlus_role, "★")
@@ -335,11 +347,11 @@ global.updateAvailableEmotes = async function (message) {
   message.member.updateEmote(config.discord.vc_1k, "💛")
   message.member.updateEmote(config.discord.g_king, "🎉")
   message.member.updateEmote(config.discord.g_god, "🤑")
-  
+
   fs.writeFileSync('./data/verified.json', JSON.stringify(currentEmoteList, null, 2))
 }
 
-global.updateAvailableSlots = async function (message) {
+globalThis.updateAvailableSlots = async function (message) {
   currentEmoteList = JSON.parse(fs.readFileSync('./data/verified.json'))
 
   message.member.updateSlot(config.discord.booster, "booster")
@@ -351,113 +363,113 @@ global.updateAvailableSlots = async function (message) {
   fs.writeFileSync('./data/verified.json', JSON.stringify(currentEmoteList, null, 2))
 }
 
-Array.prototype.removeDuplicates = function() {
+Array.prototype.removeDuplicates = function () {
   let seen = {};
-  return this.filter(function(item) {
-      return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+  return this.filter(function (item) {
+    return seen.hasOwnProperty(item) ? false : (seen[item] = true);
   });
 }
 
 
-global.createEmoteEmbed = async function(emotes, user) { 
+globalThis.createEmoteEmbed = async function (emotes, user) {
   let slots = 0
   let embed = new Discord.MessageEmbed()
     .setTitle('**__Slots__**')
     .setColor('0x00bfff')
-    .setAuthor(await getIGN(user.uuid)+'\'s Emotes', `https://mc-heads.net/avatar/${user.uuid}`)
+    .setAuthor(await getIGN(user.uuid) + '\'s Emotes', `https://mc-heads.net/avatar/${user.uuid}`)
 
   Object.keys(user.emotes.slots).forEach(slot => {
-    switch(slot) {
+    switch (slot) {
       case 'default':
         slots++
-        embed.addField(slots +': **Default**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **Default**', '`' + user.emotes.slots[slot] + '`', true)
         break;
       case 'vc500':
         slots++
-        embed.addField(slots +': **VC Nolife**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **VC Nolife**', '`' + user.emotes.slots[slot] + '`', true)
         break;
       case 'booster':
         slots++
-        embed.addField(slots +': **Booster**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **Booster**', '`' + user.emotes.slots[slot] + '`', true)
         break;
       case 'msg100k':
         slots++
-        embed.addField(slots +': **100k Msg**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **100k Msg**', '`' + user.emotes.slots[slot] + '`', true)
         break;
       case 'g_god':
         slots++
-        embed.addField(slots +': **Giveaway God**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **Giveaway God**', '`' + user.emotes.slots[slot] + '`', true)
         break;
       case 'staff':
         slots++
-        embed.addField(slots +': **Staff**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **Staff**', '`' + user.emotes.slots[slot] + '`', true)
         break;
       case 'extra':
         slots++
-        embed.addField(slots +': **Extra Slot**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **Extra Slot**', '`' + user.emotes.slots[slot] + '`', true)
         break;
     }
   })
-  if(emotes.length == 0){
+  if (emotes.length == 0) {
     embed.addField('**Available Emotes**', 'You have no emotes :(', false)
-  }else{
-    embed.addField('**Available Emotes**', '`'+ emotes.join(' ') +'`\nUse -equip [:emote:] [slot #] to equip emotes', false)
+  } else {
+    embed.addField('**Available Emotes**', '`' + emotes.join(' ') + '`\nUse -equip [:emote:] [slot #] to equip emotes', false)
   }
   return embed
 }
 
-global.createEmoteEmbed2 = async function(user) { 
+globalThis.createEmoteEmbed2 = async function (user) {
   let slots = 0
   let embed = new Discord.MessageEmbed()
     .setTitle('**__Slots__**')
     .setColor('0x00bfff')
-    .setAuthor(await getIGN(user.uuid)+'\'s Emotes', `https://mc-heads.net/avatar/${user.uuid}`)
+    .setAuthor(await getIGN(user.uuid) + '\'s Emotes', `https://mc-heads.net/avatar/${user.uuid}`)
 
   Object.keys(user.emotes.slots).forEach(slot => {
-    switch(slot) {
+    switch (slot) {
       case 'default':
         slots++
-        embed.addField(slots +': **Default**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **Default**', '`' + user.emotes.slots[slot] + '`', true)
         break;
       case 'vc500':
         slots++
-        embed.addField(slots +': **VC Nolife**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **VC Nolife**', '`' + user.emotes.slots[slot] + '`', true)
         break;
       case 'booster':
         slots++
-        embed.addField(slots +': **Booster**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **Booster**', '`' + user.emotes.slots[slot] + '`', true)
         break;
       case 'msg100k':
         slots++
-        embed.addField(slots +': **100k Msg**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **100k Msg**', '`' + user.emotes.slots[slot] + '`', true)
         break;
       case 'g_god':
         slots++
-        embed.addField(slots +': **Giveaway God**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **Giveaway God**', '`' + user.emotes.slots[slot] + '`', true)
         break;
       case 'staff':
         slots++
-        embed.addField(slots +': **Staff**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **Staff**', '`' + user.emotes.slots[slot] + '`', true)
         break;
       case 'extra':
         slots++
-        embed.addField(slots +': **Extra Slot**', '`'+ user.emotes.slots[slot] +'`', true)
+        embed.addField(slots + ': **Extra Slot**', '`' + user.emotes.slots[slot] + '`', true)
         break;
     }
   })
-  if(user.emotes.unlocked_emotes.length == 0){
+  if (user.emotes.unlocked_emotes.length == 0) {
     embed.addField('**Unlocked Emotes**', 'This person has no emotes :(', false)
-  }else{
-    embed.addField('**Unlocked Emotes**', '`'+ user.emotes.unlocked_emotes.join(' ') +'`', false)
+  } else {
+    embed.addField('**Unlocked Emotes**', '`' + user.emotes.unlocked_emotes.join(' ') + '`', false)
   }
-  if(user.emotes.given_emotes.length == 0){
+  if (user.emotes.given_emotes.length == 0) {
     embed.addField('**Given Emotes**', 'This person has no emotes :(', false)
-  }else{
-    embed.addField('**Given Emotes**', '`'+ user.emotes.given_emotes.join(' ') +'`', false)
+  } else {
+    embed.addField('**Given Emotes**', '`' + user.emotes.given_emotes.join(' ') + '`', false)
   }
   return embed
 }
 
-Discord.GuildMember.prototype.isOwner = function() {
+Discord.GuildMember.prototype.isOwner = function () {
   return (this.user.id === "347884694408265729" || this.user.id === "343129897360949248")
 }
