@@ -2,7 +2,7 @@ const axios = require('axios')
 const { GuildMemberRoleManager } = require('discord.js')
 const config = require('../data/config.json')
 
-global.getUUID = async function getUUID(username) {
+globalThis.getUUID = async function getUUID(username) {
     try {
         var response = await axios.get(`https://api.mojang.com/users/profiles/minecraft/${username}`)
         if (!response.data.id) {
@@ -14,7 +14,7 @@ global.getUUID = async function getUUID(username) {
         return 'invalid player'
     }
 }
-global.getIGN = async function getIGN(uuid) {
+globalThis.getIGN = async function getIGN(uuid) {
     try {
         response = await axios.get(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`)
         return response.data.name
@@ -23,7 +23,7 @@ global.getIGN = async function getIGN(uuid) {
     }
 }
 
-global.dungeoneering_xp = {
+globalThis.dungeoneering_xp = {
     0: 0,
     1: 50,
     2: 75,
@@ -148,7 +148,7 @@ function getDungeonLevel(xp) {
     return level + percentage - 1;
 }
 
-global.getCataAndPb = async function (uuid) {
+globalThis.getCataAndPb = async function (uuid) {
     let response = await HypixelApiRequest(`https://api.hypixel.net/skyblock/profiles?key=${config.minecraft.apiKey}&uuid=${uuid}`)
     if (response === "Api throttle") { return response; }
     response = response.data
@@ -215,7 +215,7 @@ global.getCataAndPb = async function (uuid) {
     return dataJSON
 }
 
-global.getSecretCountCataDiscord = async function(uuid) {
+globalThis.getSecretCountCataDiscord = async function(uuid) {
     let response = await HypixelApiRequest(`https://api.hypixel.net/player?key=${config.minecraft.apiKey}&uuid=${uuid}`)
     if (response === "Api throttle") { return response; }
     response = response.data
@@ -227,19 +227,19 @@ global.getSecretCountCataDiscord = async function(uuid) {
     }
 }
 
-global.fmtMStoMSS = function(millis) {
+globalThis.fmtMStoMSS = function(millis) {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
 }
 
-global.getDiscordFromPlayer = async function (uuid) {
+globalThis.getDiscordFromPlayer = async function (uuid) {
     let response = await HypixelApiRequest(`https://api.hypixel.net/player?key=${config.minecraft.apiKey}&uuid=${uuid}`);
     if (response === "Api throttle") { return response; }
     return response?.data?.player?.socialMedia?.links?.DISCORD || "Player does not have a linked discord"
 }
 
-global.getPureHypixelResponse = async function (uuid) {
+globalThis.getPureHypixelResponse = async function (uuid) {
     let response = await HypixelApiRequest(`https://api.hypixel.net/skyblock/profiles?key=${config.minecraft.apiKey}&uuid=${uuid}`)
     if (response === "Api throttle") { return response; }
     return response.data
@@ -249,8 +249,8 @@ setInterval(() => {
     requestCount = 0
 }, 60000);
 
-global.requestCount = 0
-global.HypixelApiRequest = async function (url, requestAdd = 1) {
+globalThis.requestCount = 0
+globalThis.HypixelApiRequest = async function (url, requestAdd = 1) {
     requestCount += requestAdd
     if (requestCount > 115) {
         return "Api throttle"
