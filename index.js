@@ -28,7 +28,10 @@ client.on('ready', async () => {
         await checkExpiredPolls();
     }, 60 * 1000);
 })
-
+globalThis.messageParam = new Discord.Message();
+globalThis.argsParam = [""]
+globalThis.configParam = config
+globalThis.fsParam = fs
 client.on('message', async (message) => {
     const cmdargs = message.content.slice(prefix.length).split(/ +/);
     const commandName = cmdargs.shift().toLowerCase();
@@ -38,10 +41,16 @@ client.on('message', async (message) => {
     if (message.author.bot) return;
     if (!message.content.startsWith(prefix)) return;
     if (command == 'help'){
-        command.execute(message, cmdargs, config, fs)
+        messageParam = message
+        argsParam = cmdargs
+        command.execute()
     }else{
         let args = message.content.substring(prefix.length).split(" ");
-        command.execute(message, args, config, fs)
+        messageParam = message
+        argsParam = args
+        command.execute()
+        // command.execute(message, args, config, fs)
+
     }
 });
 
