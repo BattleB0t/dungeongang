@@ -4,6 +4,7 @@
         "apiKey": "8b546a85-bd60-4a34-a90b-e9148ffd2fd4"
     },
     "discord": {
+        "logChannel": "846393235541590026",
         "member_role": "714043328894861312",
         "verification_channel": "748622856514175077",
         "update_channel": "744850191550775357",
