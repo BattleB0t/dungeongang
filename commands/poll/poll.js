@@ -5,7 +5,8 @@ module.exports = {
   aliases: [],
   usage: 'poll [username]',
   description: 'Creates a poll for the specified user',
-  async execute(message, args, config, fs) {
+  async execute() {
+    let message = messageParam, args = argsParam, config = configParam, fs = fsParam
     let polls = JSON.parse(fs.readFileSync('./data/polled_users.json'))
     if(!message.member.roles.cache.has(config.discord.poll_creation_role)){
         return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
@@ -124,20 +125,21 @@ module.exports = {
           message.react('🤐')
           message.react('👎')
           let pollJson = {
-              "poll_id": poll_id,
-              "username": IGN,
-              "poll_message_id": message.id,
-              "poll_channel_id": message.channel.id,
-              "votes_positive": [],
-              "votes_neutral": [],
-              "votes_negative": [],
-              "uuid": uuid,
-              "personal_best": data.fastestTime,
-              "catacombs_level": data.catacombs,
-              "secrets": data.secretsFound,
-              "poll_end_date": pollEndDate,
-              "active": true
-          }
+            "poll_id": poll_id,
+            "username": IGN,
+            "poll_message_id": message.id,
+            "poll_channel_id": message.channel.id,
+            "votes_positive": [],
+            "votes_neutral": [],
+            "votes_negative": [],
+            "uuid": uuid,
+            "personal_best": floor7,
+            "m6_best": master6,
+            "catacombs_level": catacombs,
+            "secrets": secretsFound,
+            "poll_end_date": pollEndDate,
+            "active": true
+        }
           if(poll_id == 0){
               let player_info = {
                   [uuid]: []

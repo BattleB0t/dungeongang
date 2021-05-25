@@ -51,7 +51,17 @@ let dungeoneering_xp = {
     47: 285559640,
     48: 360559640,
     49: 453559640,
-    50: 569809640
+    50: 569809640,
+    51: 708815308,
+    52: 878166305,
+    53: 1083705521,
+    54: 1332256501,
+    55: 1631764764,
+    56: 1991456278,
+    57: 2422014775,
+    58: 2935779757,
+    59: 3546967162,
+    60: 4271914829
 }
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -70,7 +80,7 @@ module.exports = {
             if (Number.isNaN(args[1]) || Number.isNaN(args[2])) {
                 return message.channel.send(createErrorEmbed(`Please provide valid catacombs levels`))
             }
-            if (args[1] > 50 || args[1] < 0 || args[2] > 50 || args[2] < 0) {
+            if (args[1] > 60 || args[1] < 0 || args[2] > 60 || args[2] < 0) {
                 return message.channel.send(createErrorEmbed(`Please provide valid catacombs levels`))
             }
             if (args[1] > args[2]) {
@@ -86,7 +96,7 @@ module.exports = {
             if (Number.isNaN(args[1])) {
                 return message.channel.send(createErrorEmbed(`Please provide valid catacombs levels`))
             }
-            if (args[1] > 50 || args[1] < 0) {
+            if (args[1] > 60 || args[1] < 0) {
                 return message.channel.send(createErrorEmbed(`Please provide valid catacombs levels`))
             }
             let username = message.member.displayName;

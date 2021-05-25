@@ -88,7 +88,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     let message = reaction.message
     if (user.bot) return;
     if (!message.guild) return;
-    let polledUsers = require('./data/polled_users.json')
+    let polledUsers = JSON.parse(fs.readFileSync('./data/polled_users.json'))
     if (!polledUsers.active_polls.includes(message.id)) return;
     if (message.guild.member(user).roles.cache.find(r => r.id === config.discord.blacklist_role)) return reaction.users.remove(user).catch(console.error)
     if (reaction.emoji.name === '👍') {

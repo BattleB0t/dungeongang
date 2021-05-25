@@ -5,7 +5,8 @@ module.exports = {
     aliases: ['ep'],
     usage: 'endpoll [poll message id]',
     description: 'Ends an active poll',
-    async execute(message, args, config, fs) {
+    async execute() {
+        let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if(!message.member.roles.cache.has(config.discord.poll_creation_role)){
             return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
         }

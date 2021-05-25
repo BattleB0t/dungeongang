@@ -111,7 +111,7 @@ globalThis.checkExpiredPolls = async function () {
   checkPoll = async function (message_id) {
     let now = new Date()
     if (!getPoll(message_id)) {
-      console.log('Poll with message ID ' + message_id + 'somehow doesn\'t exist, clearing poll.')
+      console.log('Poll with message ID ' + message_id + ' somehow doesn\'t exist, clearing poll.')
       return writePoll(message_id, 'nothing', 'expire')
     }
     if (Date.parse(getPoll(message_id).poll_end_date) < now) {
@@ -165,14 +165,19 @@ globalThis.createPollEndedEmbed = function (json) {
         "inline": true
       },
       {
-        "name": "**Secrets**",
-        "value": json.secrets,
+        "name": "**Master 6 S+ PB**",
+        "value": json.m6_best,
         "inline": true
       },
       {
         "name": `Poll Results`,
         "value": `${json.votes_positive.length} :thumbsup: ${json.votes_neutral.length} :zipper_mouth: ${json.votes_negative.length} :thumbsdown:`,
         "inline": false
+      },
+      {
+        "name": "**Secrets**",
+        "value": json.secrets,
+        "inline": true
       },
       {
         "name": "**Anonymous**",
@@ -218,14 +223,19 @@ globalThis.getPollInProgressEmbed = function (json) {
         "inline": true
       },
       {
-        "name": "**Secrets**",
-        "value": json.secrets,
+        "name": "**Master 6 S+ PB**",
+        "value": json.m6_best,
         "inline": true
       },
       {
         "name": `Results`,
         "value": `${json.votes_positive.length} :thumbsup: ${json.votes_neutral.length} :zipper_mouth: ${json.votes_negative.length} :thumbsdown:`,
         "inline": false
+      },
+      {
+        "name": "**Secrets**",
+        "value": json.secrets,
+        "inline": true
       },
       {
         "name": "**Anonymous**",
@@ -472,4 +482,4 @@ globalThis.createEmoteEmbed2 = async function (user) {
 
 Discord.GuildMember.prototype.isOwner = function () {
   return (this.user.id === "347884694408265729" || this.user.id === "343129897360949248")
-};
+}
