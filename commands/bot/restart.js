@@ -6,8 +6,10 @@ module.exports = {
     description: '(bot owner only)',
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
+        if (isInRestart) return;
         if (!message.member.isOwner()) return;
         message.channel.send('Restarting...').then(m => {
+            isInRestart = true
             setTimeout(function () {
                 process.on("exit", function () {
                     require("child_process").spawn(process.argv.shift(), process.argv, {
