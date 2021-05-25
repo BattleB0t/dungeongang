@@ -21,7 +21,7 @@ for (const folder of commandFolders) {
     }
 }
 
-
+globalThis.isInRestart = false
 let MessagesToBeDeletedVerify = []
 let MessagesToBeDeletedUpdate = []
 globalThis.logChannel = null
