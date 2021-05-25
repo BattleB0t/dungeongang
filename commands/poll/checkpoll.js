@@ -5,7 +5,8 @@ module.exports = {
     aliases: ['cp'],
     usage: 'check [poll message id]',
     description: 'Checks the stats of a current or ended poll',
-    async execute(message, args, config, fs) {
+    async execute() {
+        let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if(!message.member.hasPermission('ADMINISTRATOR') && args[2] !== 'override'){
             return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
         }
