@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 const Client = require('./client/Client');
+require("./functions/logToChannel")
 const { token, prefix } = require('./node_modules/client.json');
 const config = require('./data/config.json')
 const client = new Client();
@@ -19,7 +20,13 @@ for (const folder of commandFolders) {
         client.commands.set(command.name, command);
     }
 }
+
+
+let MessagesToBeDeletedVerify = []
+let MessagesToBeDeletedUpdate = []
+globalThis.logChannel = null
 client.on('ready', async () => {
+    logChannel = await client.channels.fetch(config.discord.logChannel)
     console.log(`Starting Dungeon Gang Bot v1.0.0`);
     client.user.setActivity(`Nice PB Kid`, {
         type: 'PLAYING'
@@ -41,8 +48,6 @@ client.on('ready', async () => {
         }
     }, 60 * 1000)
 })
-let MessagesToBeDeletedVerify = []
-let MessagesToBeDeletedUpdate = []
 globalThis.messageParam = new Discord.Message();
 globalThis.argsParam = [""]
 globalThis.configParam = config
