@@ -472,4 +472,4 @@ globalThis.createEmoteEmbed2 = async function (user) {
 
 Discord.GuildMember.prototype.isOwner = function () {
   return (this.user.id === "347884694408265729" || this.user.id === "343129897360949248")
-}
+};
