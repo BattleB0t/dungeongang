@@ -28,9 +28,6 @@ module.exports = {
             return message.channel.send(createErrorEmbed('You have not unlocked this slot!'))
         }
         let slot = Object.keys(slots)[args[2] - 1]
-        if(slots[slot] != 'none'){
-            return message.channel.send(createErrorEmbed('This slot already has an emote!'))
-        }
         if(slot == 'staff'){
             function hasUnicode(s) {
                 return /[^\u0000-\u007f]/.test(s);
