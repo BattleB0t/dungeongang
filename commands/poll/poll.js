@@ -1,5 +1,17 @@
 const Discord = require('discord.js')
-
+const { MessageButton } = require('discord-buttons');
+const PositiveButton = new MessageButton()
+  .setStyle('green')
+  .setLabel('👍')
+  .setID('POSITIVE');
+const NeutralButton = new MessageButton()
+  .setStyle('blurple')
+  .setLabel('🤐')
+  .setID('NEUTRAL');
+const NegativeButton = new MessageButton()
+  .setStyle('red')
+  .setLabel('👎')
+  .setID('NEGATIVE');
 module.exports = {
   name: 'poll',
   aliases: [],
@@ -120,10 +132,13 @@ module.exports = {
         ]
       };
       message.channel.send(createSuccessEmbed(`Poll for ${IGN} sent in <#${config.discord.poll_channel}>!`))
-      return message.client.channels.cache.get(config.discord.poll_channel).send({ embed: PollEmbed }).then(message => {
-          message.react('👍')
-          message.react('🤐')
-          message.react('👎')
+      return message.client.channels.cache.get(config.discord.poll_channel).send({
+        buttons: [
+          PositiveButton, NeutralButton, NegativeButton
+        ],
+        embed: PollEmbed
+      })
+      .then(message => {
           let pollJson = {
             "poll_id": poll_id,
             "username": IGN,

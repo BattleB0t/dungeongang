@@ -1,10 +1,12 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 const Client = require('./client/Client');
+globalThis.logChannel = null
 require("./functions/logToChannel")
 const { token, prefix } = require('./node_modules/client.json');
 const config = require('./data/config.json')
 const client = new Client();
+const disbut = require('discord-buttons')(client);
 client.commands = new Discord.Collection();
 const commandFolders = fs.readdirSync('./commands');
 const apiFunctions = require('./functions/apiFunctions.js')
@@ -24,7 +26,6 @@ for (const folder of commandFolders) {
 globalThis.isInRestart = false
 let MessagesToBeDeletedVerify = []
 let MessagesToBeDeletedUpdate = []
-globalThis.logChannel = null
 client.on('ready', async () => {
     logChannel = await client.channels.fetch(config.discord.logChannel)
     console.log(`Starting Dungeon Gang Bot v1.0.0`);
@@ -82,69 +83,87 @@ client.on('message', async (message) => {
     }
 });
 
-client.on('messageReactionAdd', async (reaction, user) => {
-    if (reaction.partial) await reaction.fetch();
-    if (reaction.message.partial) await reaction.message.fetch();
-    let message = reaction.message
-    if (user.bot) return;
-    if (!message.guild) return;
+client.on('clickButton', async (button) => {
+    let message = button.message
+    let user = button.clicker.user
+    if (user.bot) return button.defer()
+    if (!message.guild) return button.defer()
     let polledUsers = JSON.parse(fs.readFileSync('./data/polled_users.json'))
-    if (!polledUsers.active_polls.includes(message.id)) return;
-    if (message.guild.member(user).roles.cache.find(r => r.id === config.discord.blacklist_role)) return reaction.users.remove(user).catch(console.error)
-    if (reaction.emoji.name === '👍') {
+    if (!polledUsers.active_polls.includes(message.id)) return button.defer()
+    if (message.member.roles.cache.find(r => r.id === config.discord.blacklist_role)) return button.defer()
+    if (button.id === 'POSITIVE') {
         if (!getPoll(message.id).votes_positive.includes(user.id) && !getPoll(message.id).votes_neutral.includes(user.id) && !getPoll(message.id).votes_negative.includes(user.id)) {
             writePoll(message.id, user.id, "positive")
-            return reaction.users.remove(user).catch(console.error)
+            return button.defer()
         } else if (getPoll(message.id).votes_neutral.includes(user.id)) {
             unWritePoll(message.id, user.id, "neutral")
             writePoll(message.id, user.id, "positive")
-            return reaction.users.remove(user).catch(console.error)
+            return button.defer()
         } else if (getPoll(message.id).votes_negative.includes(user.id)) {
             unWritePoll(message.id, user.id, "negative")
             writePoll(message.id, user.id, "positive")
-            return reaction.users.remove(user).catch(console.error)
+            return button.defer()
         } else if (getPoll(message.id).votes_positive.includes(user.id)) {
-            return reaction.users.remove(user).catch(console.error)
+            return button.defer()
         }
-    } else if (reaction.emoji.name === '🤐') {
+    } else if (button.id === 'NEUTRAL') {
         if (!getPoll(message.id).votes_positive.includes(user.id) && !getPoll(message.id).votes_neutral.includes(user.id) && !getPoll(message.id).votes_negative.includes(user.id)) {
             writePoll(message.id, user.id, "neutral")
-            return reaction.users.remove(user).catch(console.error)
+            return button.defer()
         } else if (getPoll(message.id).votes_positive.includes(user.id)) {
             unWritePoll(message.id, user.id, "positive")
             writePoll(message.id, user.id, "neutral")
-            return reaction.users.remove(user).catch(console.error)
+            return button.defer()
         } else if (getPoll(message.id).votes_negative.includes(user.id)) {
             unWritePoll(message.id, user.id, "negative")
             writePoll(message.id, user.id, "neutral")
-            return reaction.users.remove(user).catch(console.error)
+            return button.defer()
         } else if (getPoll(message.id).votes_neutral.includes(user.id)) {
-            return reaction.users.remove(user).catch(console.error)
+            return button.defer()
         }
-    } else if (reaction.emoji.name === '👎') {
+    } else if (button.id === 'NEGATIVE') {
         if (!getPoll(message.id).votes_positive.includes(user.id) && !getPoll(message.id).votes_neutral.includes(user.id) && !getPoll(message.id).votes_negative.includes(user.id)) {
             writePoll(message.id, user.id, "negative")
-            return reaction.users.remove(user).catch(console.error)
+            return button.defer()
         } else if (getPoll(message.id).votes_positive.includes(user.id)) {
             unWritePoll(message.id, user.id, "positive")
             writePoll(message.id, user.id, "negative")
-            return reaction.users.remove(user).catch(console.error)
+            return button.defer()
         } else if (getPoll(message.id).votes_neutral.includes(user.id)) {
             unWritePoll(message.id, user.id, "neutral")
             writePoll(message.id, user.id, "negative")
-            return reaction.users.remove(user).catch(console.error)
+            return button.defer()
         } else if (getPoll(message.id).votes_negative.includes(user.id)) {
-            return reaction.users.remove(user).catch(console.error)
+            return button.defer()
         }
     }
 })
 
+const PositiveButton = new disbut.MessageButton()
+  .setStyle('green')
+  .setLabel('👍')
+  .setID('POSITIVE')
+  .setDisabled();
+const NeutralButton = new disbut.MessageButton()
+  .setStyle('blurple')
+  .setLabel('🤐')
+  .setID('NEUTRAL')
+  .setDisabled();
+const NegativeButton = new disbut.MessageButton()
+  .setStyle('red')
+  .setLabel('👎')
+  .setID('NEGATIVE')
+  .setDisabled();
 global.endPollEmbed = async function (message_id, channel_id, EditedPollEmbed) {
     client.channels.cache.get(channel_id).messages.fetch({ around: message_id, limit: 1 })
         .then(message => {
             let fetched_message = message.first();
-            fetched_message.edit({ embed: EditedPollEmbed });
-            fetched_message.reactions.removeAll().catch(error => console.error('Failed to clear reactions for: ' + message.id, error));
+            fetched_message.edit({
+                buttons: [
+                  PositiveButton, NeutralButton, NegativeButton
+                ],
+                embed: EditedPollEmbed
+              });
         })
         .catch(error => {
             console.log('Unable to edit message: ' + message_id + ' in channel: ' + channel_id)

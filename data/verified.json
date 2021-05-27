@@ -275,7 +275,13 @@
     "826875733073723412",
     "401641600020905984",
     "435467245334953984",
-    "264705672766160907"
+    "264705672766160907",
+    "345310898854035458",
+    "588678699507908608",
+    "473101577515696129",
+    "423509978800848906",
+    "640553914873282600",
+    "414827166509957121"
   ],
   "users": {
     "363199691946459136": {
@@ -3281,6 +3287,66 @@
     },
     "264705672766160907": {
       "uuid": "235f9fed3b1040e1b66eb1a1bbe75991",
+      "emotes": {
+        "unlocked_emotes": [],
+        "given_emotes": [],
+        "slots": {
+          "default": "none"
+        }
+      }
+    },
+    "345310898854035458": {
+      "uuid": "0c2e5f1ebe6b439d8678245d4c628f4d",
+      "emotes": {
+        "unlocked_emotes": [],
+        "given_emotes": [],
+        "slots": {
+          "default": "none"
+        }
+      }
+    },
+    "588678699507908608": {
+      "uuid": "e8624b5a5ac94bb38ea5bc6207ad47fc",
+      "emotes": {
+        "unlocked_emotes": [],
+        "given_emotes": [],
+        "slots": {
+          "default": "none"
+        }
+      }
+    },
+    "473101577515696129": {
+      "uuid": "e461a54ce5744b0a8ed4eff0783f9736",
+      "emotes": {
+        "unlocked_emotes": [],
+        "given_emotes": [],
+        "slots": {
+          "default": "none"
+        }
+      }
+    },
+    "423509978800848906": {
+      "uuid": "4fdab5051db24334877630abf966ec98",
+      "emotes": {
+        "unlocked_emotes": [],
+        "given_emotes": [],
+        "slots": {
+          "default": "none"
+        }
+      }
+    },
+    "640553914873282600": {
+      "uuid": "9f0c0bafb23b46b1b7c677e3e7d0781b",
+      "emotes": {
+        "unlocked_emotes": [],
+        "given_emotes": [],
+        "slots": {
+          "default": "none"
+        }
+      }
+    },
+    "414827166509957121": {
+      "uuid": "40bb5b102fa74b908f174b2fb1a501cb",
       "emotes": {
         "unlocked_emotes": [],
         "given_emotes": [],
