@@ -74,6 +74,7 @@ module.exports = {
                 let catacombs = data.cataLevel
                 let master6 = data['M6']['sPlus']
                 let floor7 = data['F7']['sPlus']
+                let master5 = data['M5']['s']
                 let secretsFound = secrets.secretCount
                 let voted = false
                 let clown = '<:no:838802013541498890>'
@@ -82,16 +83,13 @@ module.exports = {
                 if (votedList.users.includes(uuid)) voted = true
                 if (clownList.users.includes(uuid)) clown = '<:yes:838801988241588304>'
                 if (!isNaN(catacombs)) {
-                    if (catacombs >= 38 && secretsFound >= 12000 && floor7 <= 285000) {
+                    if (catacombs >= 40 && secretsFound >= 15000 && master5 <= 180000) {
                         tp = '<:yes:838801988241588304>'
                     }
                 }
                 if (!isNaN(catacombs)) {
                     if (catacombs >= 42 && secretsFound >= 20000 && voted == false) {
-                        if (floor7 <= 250000) {
-                            tpp = '<:yes:838801988241588304>'
-                        }
-                        if (master6 <= 240000) {
+                        if (master6 <= 240000 || floor7 <= 240000) {
                             tpp = '<:yes:838801988241588304>'
                         }
                         if (tpp == '<:yes:838801988241588304>' && tp == '<:no:838802013541498890>') {
@@ -101,6 +99,7 @@ module.exports = {
                 }
                 if(!isNaN(floor7)) floor7 = fmtMStoMSS(floor7)
                 if(!isNaN(master6)) master6 = fmtMStoMSS(master6)
+                if (!isNaN(master5)) master5 = fmtMStoMSS(master5)
                 let checkEmbed = {
                     "color": 49151,
                     "author": {
@@ -124,6 +123,10 @@ module.exports = {
                         {
                             "name": "**Master 6 S+ PB**",
                             "value": `${master6}`
+                        },
+                        {
+                            "name": "**Master 5 S PB**",
+                            "value": `${master5}`
                         },
                         {
                             "name": "**Voted-Out**",
