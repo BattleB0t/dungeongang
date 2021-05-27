@@ -138,16 +138,15 @@ function getDungeonLevel(xp) {
     for (var i = 0; i < dungeon_xp.length; i++) {
         if (dungeon_xp[i][1] > xp) {
             level = dungeon_xp[i][0]
-            a = xp - dungeon_xp[i - 1][1] 
+            a = xp - dungeon_xp[i - 1][1]
             b = dungeon_xp[i][1] - dungeon_xp[i - 1][1]
-            percentage = a /b 
+            percentage = a / b
             break;
         }
 
     }
     return level + percentage - 1;
 }
-
 globalThis.getCataAndPb = async function (uuid) {
     let response = await HypixelApiRequest(`https://api.hypixel.net/skyblock/profiles?key=${config.minecraft.apiKey}&uuid=${uuid}`)
     if (response === "Api throttle") { return response; }
@@ -155,7 +154,7 @@ globalThis.getCataAndPb = async function (uuid) {
 
     let highestCataXp = -1;
     let highestProfile = ""
-    if (response.profiles == null) throw new Error(await getIGN(uuid) +' has no SkyBlock profiles.')
+    if (response.profiles == null) throw new Error(await getIGN(uuid) + ' has no SkyBlock profiles.')
     for (let i = 0; i < response.profiles.length; i++) {
         if (response.profiles[i].members[uuid].dungeons !== undefined) {
             if (response.profiles[i].members[uuid].dungeons.dungeon_types.catacombs.experience > highestCataXp) {
@@ -165,7 +164,7 @@ globalThis.getCataAndPb = async function (uuid) {
         }
     };
     if (highestProfile === "") return {
-        cataLevel: 0,
+        cataLevel: getLevelByXp(highestCataXp),
         F0: { s: 'No PB Found', sPlus: 'No PB Found' },
         M0: { s: 'No PB Found', sPlus: 'No PB Found' },
         F1: { s: 'No PB Found', sPlus: 'No PB Found' },
@@ -182,12 +181,7 @@ globalThis.getCataAndPb = async function (uuid) {
         M6: { s: 'No PB Found', sPlus: 'No PB Found' },
         F7: { s: 'No PB Found', sPlus: 'No PB Found' },
         M7: { s: 'No PB Found', sPlus: 'No PB Found' }
-      }
-    /*let cataLevel = 0
-    while (highestCataXp > dungeoneering_xp[cataLevel]) {
-        cataLevel++
-        highestCataXp = highestCataXp - dungeoneering_xp[cataLevel]
-    }*/
+    }
     let cataLevel = getDungeonLevel(highestCataXp)
     let dataJSON = {
         cataLevel: cataLevel.toFixed(2)
@@ -215,7 +209,7 @@ globalThis.getCataAndPb = async function (uuid) {
     return dataJSON
 }
 
-globalThis.getSecretCountCataDiscord = async function(uuid) {
+globalThis.getSecretCountCataDiscord = async function (uuid) {
     let response = await HypixelApiRequest(`https://api.hypixel.net/player?key=${config.minecraft.apiKey}&uuid=${uuid}`)
     if (response === "Api throttle") { return response; }
     response = response.data
@@ -227,7 +221,7 @@ globalThis.getSecretCountCataDiscord = async function(uuid) {
     }
 }
 
-globalThis.fmtMStoMSS = function(millis) {
+globalThis.fmtMStoMSS = function (millis) {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
