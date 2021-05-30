@@ -6,7 +6,7 @@ module.exports = {
     description: 'egom.',
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
-        if (!message.member.roles.cache.has(config.discord.egomers_role)) return;
+        if (!message.member.roles.cache.has(config.discord.egomers_role) && !message.member.roles.cache.has(config.discord.staff_ranks)) return;
         let egomChannels = [config.discord.top_general, config.discord.plus_general, config.discord.egom_chatv2, config.discord.staff_commands]
         if (!egomChannels.includes(message.channel.id)) return; 
         const egomArr = [
