@@ -3,7 +3,7 @@ module.exports = {
     name: 'egom',
     aliases: [],
     usage: '-egom',
-    description: 'egom.',
+    description: '(egomers only)',
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if (!message.member.roles.cache.has(config.discord.egomers_role) && !message.member.roles.cache.has(config.discord.staff_ranks)) return;
