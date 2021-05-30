@@ -536,7 +536,7 @@ let dungeoneering_xp = {
   49: 93000000,
   50: 116250000
 }
-globalThis.getLevelByXp = function(xp) {
+globalThis.getLevelByXp = function (xp) {
   let xp_table = dungeoneering_xp;
   if (isNaN(xp)) {
     return 0
@@ -545,7 +545,10 @@ globalThis.getLevelByXp = function(xp) {
   let xpTotal = 0;
   let level = 0;
   let uncappedLevel = 0;
+  let levelCap = 1;
+  let maxLevel = 1;
 
+  levelCap = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
   if (levelCap > maxLevel)
     maxLevel = levelCap;
 
