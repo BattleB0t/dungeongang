@@ -27,7 +27,7 @@ globalThis.isInRestart = false
 let MessagesToBeDeletedVerify = []
 let MessagesToBeDeletedUpdate = []
 client.on('ready', async () => {
-    logChannel = await client.channels.fetch(config.discord.logChannel)
+    // logChannel = await client.channels.fetch(config.discord.logChannel)
     console.log(`Starting Dungeon Gang Bot v1.0.0`);
     client.user.setActivity(`Nice PB Kid`, {
         type: 'PLAYING'
@@ -54,6 +54,7 @@ globalThis.argsParam = [""]
 globalThis.configParam = config
 globalThis.fsParam = fs
 client.on('message', async (message) => {
+    if (message.content.replace(/ /g, "").includes("vegan") && message.content.replace(/ /g, "").includes("vid") && !message.member.roles.cache.has(config.discord.staff_role)) return await message.delete()
     if (message.channel.id === config.discord.verification_channel || message.channel.id === config.discord.update_channel) {
         if (!message.member.roles.cache.has(config.discord.staff_role)) {
             if (message.channel.id === config.discord.verification_channel)
