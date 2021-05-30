@@ -54,7 +54,8 @@ globalThis.argsParam = [""]
 globalThis.configParam = config
 globalThis.fsParam = fs
 client.on('message', async (message) => {
-    if (message.content.replace(/ /g, "").includes("vegan") && message.content.replace(/ /g, "").includes("vid") && !message.member.roles.cache.has(config.discord.staff_role)) return await message.delete()
+    if (message.content.replace(/ /g, "").toLowerCase().includes("vegan") && message.content.replace(/ /g, "").toLowerCase().includes("vid") && !message.member.roles.cache.has(config.discord.staff_role)) return await message.delete()
+    else if (message.member.id === "347201609807167499" && (message.content.replace(/ /g, "").toLowerCase().includes("vegan") || message.content.replace(/ /g, "").toLowerCase().includes("vid"))) return await message.delete()
     if (message.channel.id === config.discord.verification_channel || message.channel.id === config.discord.update_channel) {
         if (!message.member.roles.cache.has(config.discord.staff_role)) {
             if (message.channel.id === config.discord.verification_channel)
