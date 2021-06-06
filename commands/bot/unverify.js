@@ -16,8 +16,11 @@ module.exports = {
         if(!message.mentions.members.first()){
             return message.channel.send(createErrorEmbed('Please mention a valid user!'))
         }
-
-        message.mentions.members.first().roles.remove(config.discord.member_role)
+        if (message.mentions.members.first().roles.has(config.discord.staff_role)) {
+            return message.channel.send(createErrorEmbed('You can\'t unverify a staff member!'))
+        }
+        message.mentions.members.first().roles.remove(message.mentions.members.first().roles.cache)
+        message.mentions.members.first().setNickname(message.mentions.members.first().user.username)
         let verified = JSON.parse(fs.readFileSync('./data/verified.json'))
         if (verified.user_ids.includes(message.mentions.members.first().user.id)) {
             verified.user_ids.splice(verified.user_ids.indexOf(message.mentions.members.first().user.id), 1)
