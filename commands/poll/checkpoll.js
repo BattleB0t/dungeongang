@@ -10,7 +10,7 @@ module.exports = {
         if(!message.member.hasPermission('ADMINISTRATOR') && args[2] !== 'override'){
             return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
         }
-        if(args[2] == 'override' && message.author.id !== '347884694408265729'){
+        if(args[2] == 'override' && message.member.isOwner()){
             return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
         }
         if(!args[1]){
