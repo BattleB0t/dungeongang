@@ -92,7 +92,7 @@ client.on('clickButton', async (button) => {
     if (!message.guild) return button.defer()
     let polledUsers = JSON.parse(fs.readFileSync('./data/polled_users.json'))
     if (!polledUsers.active_polls.includes(message.id)) return button.defer()
-    if (message.guild.member(uder).roles.cache.find(r => r.id === config.discord.blacklist_role)) return button.defer()
+    if (message.guild.member(user).roles.cache.find(r => r.id === config.discord.blacklist_role)) return button.defer()
     if (button.id === 'POSITIVE') {
         if (!getPoll(message.id).votes_positive.includes(user.id) && !getPoll(message.id).votes_neutral.includes(user.id) && !getPoll(message.id).votes_negative.includes(user.id)) {
             writePoll(message.id, user.id, "positive")
