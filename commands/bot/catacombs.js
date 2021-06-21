@@ -54,8 +54,7 @@ module.exports = {
                             throw error
                         }
                         console.log('axios error')
-                        let errorMessage = error.response.data.cause
-                        message.edit(createErrorEmbed(errorMessage))
+                        message.edit(createErrorEmbed(`(**${error.response.status}**) ${error.response.statusText}`))
                         throw error
                     })
                 let secrets = await getSecretCountCataDiscord(uuid)
@@ -65,8 +64,7 @@ module.exports = {
                             throw error
                         }
                         console.log('axios error')
-                        let errorMessage = error.response.data.cause
-                        message.edit(createErrorEmbed(errorMessage))
+                        message.edit(createErrorEmbed(`(**${error.response.status}**) ${error.response.statusText}`))
                         throw error
                     })
                 if (data === "Api throttle") { return message.edit(createErrorEmbed("API Throttle: Please try again later.")) }

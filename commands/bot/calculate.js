@@ -112,12 +112,11 @@ module.exports = {
                     let response = await getPureHypixelResponse(uuid)
                         .catch(error => {
                             if(!error.isAxiosError) {
-                                message.edit(createErrorEmbed(error))
+                                newMessage.edit(createErrorEmbed(error))
                                 throw error
                             }
                             console.log('axios error')
-                            let errorMessage = error.response.data.cause
-                            message.edit(createErrorEmbed(errorMessage))
+                            newMessage.edit(createErrorEmbed(`(**${error.response.status}**) ${error.response.statusText}`))
                             throw error
                         })
                     if (response === "Api throttle") { return message.edit(createErrorEmbed("API Throttle: Please try again later.")) }
@@ -130,8 +129,7 @@ module.exports = {
                             throw error
                         }
                         console.log('axios error')
-                        let errorMessage = error.response.data.cause
-                        newMessage.edit(createErrorEmbed(errorMessage))
+                        newMessage.edit(createErrorEmbed(`(**${error.response.status}**) ${error.response.statusText}`))
                         throw error
                     }
                     for (let i = 0; i < profiles; i++) {

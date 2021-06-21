@@ -37,25 +37,23 @@ module.exports = {
     }
     let data = await getCataAndPb(uuid)
     .catch(error => {
-        if(!error.isAxiosError) {
-            message.channel.send(createErrorEmbed(error))
-            throw error
-        }
-        console.log('axios error')
-        let errorMessage = error.response.data.cause
-        message.channel.send(createErrorEmbed(errorMessage))
+      if(!error.isAxiosError) {
+        message.edit(createErrorEmbed(error))
         throw error
+    }
+    console.log('axios error')
+    message.edit(createErrorEmbed(`(**${error.response.status}**) ${error.response.statusText}`))
+    throw error
     })
     let secrets = await getSecretCountCataDiscord(uuid)
       .catch(error => {
-          if(!error.isAxiosError) {
-              message.channel.send(createErrorEmbed(error))
-              throw error
-          }
-          console.log('axios error')
-          let errorMessage = error.response.data.cause
-          message.channel.send(createErrorEmbed(errorMessage))
+        if(!error.isAxiosError) {
+          message.edit(createErrorEmbed(error))
           throw error
+      }
+      console.log('axios error')
+      message.edit(createErrorEmbed(`(**${error.response.status}**) ${error.response.statusText}`))
+      throw error
       })
     uuid = uuid.substr(0, 8) + "-" + uuid.substr(8, 4) + "-" + uuid.substr(12, 4) + "-" + uuid.substr(16, 4) + "-" + uuid.substr(20)
     if (data === "Api throttle") { return message.channel.send(createErrorEmbed("API Throttle: Please try again later.")) }

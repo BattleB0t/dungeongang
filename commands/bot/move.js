@@ -20,7 +20,7 @@ module.exports = {
         if (!message.mentions.members.first().voice.channel) {
             return message.channel.send(createErrorEmbed('The user you are moving must be in a voice channel!'))
         }
-        await message.mentions.members.first().voice.setChannel(message.member.voice.channel, 'Moved into the channel by '+ message.author.tag)
+        await message.mentions.members.first().voice.setChannel(message.member.voice.channel, 'Moved '+ message.mentions.members.first().user.tag +' into the channel '+ message.member.voice.channel.name +' by '+ message.author.tag)
         return message.channel.send(createSuccessEmbed('Moved '+ args[1] +' into the channel <#'+ message.member.voice.channel.id +'>'))
     },
 };

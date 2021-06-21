@@ -46,8 +46,7 @@ module.exports = {
                             throw error
                         }
                         console.log('axios error')
-                        let errorMessage = error.response.data.cause
-                        message.edit(createErrorEmbed(errorMessage))
+                        message.edit(createErrorEmbed(`(**${error.response.status}**) ${error.response.statusText}`))
                         throw error
                     })
                 let cataLevel = 0
