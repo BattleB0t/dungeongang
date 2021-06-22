@@ -264,14 +264,14 @@ Discord.GuildMember.prototype.giveCorrectCataRole = async function (cataLevel) {
   let ObjectValues = Object.values(config.discord.cata_roles)
   await this.roles.remove(this.roles.cache.filter(role => ObjectValues.includes(role.id)))
   let correctCataRole = ""
-  if (cataLevel > 29) {
-    if (cataLevel < 35) {
-      correctCataRole = config.discord.cata_roles["30+"]
+  if (cataLevel > 34) {
+    if (cataLevel < 40) {
+      correctCataRole = config.discord.cata_roles["35+"]
     } else {
-      if (this.roles.cache.find(role => role.id === config.discord.normalTp_role) && cataLevel > 37) {
+      if (this.roles.cache.find(role => role.id === config.discord.normalTp_role) && cataLevel > 39) {
         correctCataRole = config.discord.cata_roles[cataLevel.toString()]
       } else {
-        correctCataRole = config.discord.cata_roles["35+"]
+        correctCataRole = config.discord.cata_roles["40+"]
       }
     }
   }
