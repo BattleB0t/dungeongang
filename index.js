@@ -54,8 +54,6 @@ globalThis.argsParam = [""]
 globalThis.configParam = config
 globalThis.fsParam = fs
 client.on('message', async (message) => {
-    if (message.content.replace(/ /g, "").toLowerCase().includes("vegan") && message.content.replace(/ /g, "").toLowerCase().includes("vid") && !message.member.roles.cache.has(config.discord.staff_role)) return await message.delete()
-    else if (message.member.id === "347201609807167499" && (message.content.replace(/ /g, "").toLowerCase().includes("vegan") || message.content.replace(/ /g, "").toLowerCase().includes("vid"))) return await message.delete()
     if (message.channel.id === config.discord.verification_channel || message.channel.id === config.discord.update_channel) {
         if (!message.member.roles.cache.has(config.discord.staff_role)) {
             if (message.channel.id === config.discord.verification_channel)
@@ -64,6 +62,7 @@ client.on('message', async (message) => {
             MessagesToBeDeletedUpdate.push(message)
         }
     }
+    if (config.discord.blacklistedChannels.includes(message.channel.id) && !message.member.roles.cache.has(config.discord.staff_role)) return;
     const cmdargs = message.content.slice(prefix.length).split(/ +/);
     const commandName = cmdargs.shift().toLowerCase();
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -85,6 +84,13 @@ client.on('message', async (message) => {
     }
 });
 
+client.on('voiceStateUpdate', (oldState, newState) => {
+    if (oldState.member.user.bot) return;
+    if (oldState.member.id !== "343129897360949248") return;
+    if (newState.channel.id !== "834808680972025906") return;
+    let membersChannel = newState.guild.channels.cache.get("820042009263472680")
+    newState.member.voice.setChannel(membersChannel, 'Moved '+ newState.member.user.tag +' into the channel '+ membersChannel.name +' by nick did it')
+})
 client.on('clickButton', async (button) => {
     let message = button.message
     let user = button.clicker.user
