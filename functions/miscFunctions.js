@@ -288,6 +288,27 @@ Discord.GuildMember.prototype.giveCorrectCataRole = async function (cataLevel) {
   }
 }
 
+Discord.GuildMember.prototype.giveCorrectCataRole2 = async cataLevel => {
+  const otherRoles = this.roles.sweep(r => Object.values(config.discord.cata_roles).includes(r))
+  let roles = [...otherRoles]
+  if (cataLevel >= 35) {
+    if (cataLevel >= 40) {
+      if (roles.includes(config.discord.normalTp_role)) {
+        roles.push(config.discord.cata_roles[cataLevel.toString()])
+      } else {
+        roles.push(config.discord.cata_roles["40+"])
+      }
+    } else {
+      roles.push(config.discord.cata_roles["35+"])
+    }
+  }
+  for (let i = 0; i < 3; i++) {
+    this.edit({
+      roles
+    }).then(() => i = 3, async e => { console.log(e); await sleep(3000) })
+  }
+}
+
 globalThis.currentEmoteList = JSON.parse(fs.readFileSync('./data/verified.json'))
 
 Discord.GuildMember.prototype.updateEmote = function (roleID, emote, conditionRole = true) {
