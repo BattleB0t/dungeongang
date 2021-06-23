@@ -39,6 +39,7 @@ client.on('ready', async () => {
         if (MessagesToBeDeletedVerify.length > 0) {
             let copyArr = MessagesToBeDeletedVerify
             MessagesToBeDeletedVerify = []
+            if (messa)
             copyArr[0].channel.bulkDelete(copyArr)
             
         }
@@ -62,7 +63,7 @@ client.on('message', async (message) => {
             MessagesToBeDeletedUpdate.push(message)
         }
     }
-    if (config.discord.lfg_channels.includes(message.channel.id) && !message.member.roles.cache.has(config.discord.staff_role)) {
+    if (config.discord.lfg_channels.includes(message.channel.id) && !message.member.roles.cache.has(config.discord.staff_role) && !message.mentions.members.first()) {
         let i = 0;
         let words = config.discord.lfg_dont_purge
         for (const word of words) {
