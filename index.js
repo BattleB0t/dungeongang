@@ -24,8 +24,6 @@ for (const folder of commandFolders) {
 }
 
 globalThis.isInRestart = false
-let MessagesToBeDeletedVerify = []
-let MessagesToBeDeletedUpdate = []
 client.on('ready', async () => {
     // logChannel = await client.channels.fetch(config.discord.logChannel)
     console.log(`Starting Dungeon Gang Bot v1.0.0`);
@@ -35,34 +33,12 @@ client.on('ready', async () => {
     setInterval(async function () {
         await checkExpiredPolls();
     }, 60 * 1000);
-    setInterval(() => {
-        if (MessagesToBeDeletedVerify.length > 0) {
-            let copyArr = MessagesToBeDeletedVerify
-            MessagesToBeDeletedVerify = []
-            if (messa)
-            copyArr[0].channel.bulkDelete(copyArr)
-            
-        }
-        if (MessagesToBeDeletedUpdate.length > 0) {
-            let copyArr = MessagesToBeDeletedUpdate
-            MessagesToBeDeletedUpdate = []
-            copyArr[0].channel.bulkDelete(copyArr)
-        }
-    }, 60 * 1000)
 })
 globalThis.messageParam = new Discord.Message();
 globalThis.argsParam = [""]
 globalThis.configParam = config
 globalThis.fsParam = fs
 client.on('message', async (message) => {
-    if (message.channel.id === config.discord.verification_channel || message.channel.id === config.discord.update_channel) {
-        if (!message.member.roles.cache.has(config.discord.staff_role)) {
-            if (message.channel.id === config.discord.verification_channel)
-            MessagesToBeDeletedVerify.push(message)
-            else
-            MessagesToBeDeletedUpdate.push(message)
-        }
-    }
     if (config.discord.lfg_channels.includes(message.channel.id) && !message.member.roles.cache.has(config.discord.staff_role) && !message.mentions.members.first()) {
         let i = 0;
         let words = config.discord.lfg_dont_purge
@@ -94,6 +70,24 @@ client.on('message', async (message) => {
 
     }
 });
+
+let autoDeleteChannels = {}
+client.on("message", (message) => {
+    if (!config.discord.autoDelete.includes(message.channel.id)) return;
+    if (autoDeleteChannels[message.channel.id] !== undefined) return;
+    autoDeleteChannels[message.channel.id] = message.channel
+})
+
+client.on("ready", async () => {
+    setInterval(async () => {
+        Object.values(autoDeleteChannels).forEach(async channel => {
+            let messages = await channel.messages.fetch({limit: 100})
+            messages = messages.filter(message => !(message.member.roles.cache.has(config.discord.staff_role) || message.pinned))
+            channel.bulkDelete(messages)
+        })
+    }, 60 * 1000)
+})
+
 
 client.on('voiceStateUpdate', (oldState, newState) => {
     if (oldState.member.user.bot) return;
