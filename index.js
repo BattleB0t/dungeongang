@@ -62,6 +62,16 @@ client.on('message', async (message) => {
             MessagesToBeDeletedUpdate.push(message)
         }
     }
+    if (config.discord.lfg_channels.includes(message.channel.id) && !message.member.roles.cache.has(config.discord.staff_role)) {
+        let i = 0;
+        let words = config.discord.lfg_dont_purge
+        for (const word of words) {
+            if (!message.content.includes(word)) {
+                i += 1
+            }
+        }
+        if (words.length === i) return await message.delete()
+    }
     if (config.discord.blacklistedChannels.includes(message.channel.id) && !message.member.roles.cache.has(config.discord.staff_role)) return;
     const cmdargs = message.content.slice(prefix.length).split(/ +/);
     const commandName = cmdargs.shift().toLowerCase();
