@@ -92,10 +92,11 @@ client.on("ready", async () => {
 client.on('voiceStateUpdate', (oldState, newState) => {
     if (oldState.member.user.bot) return;
     if (oldState.member.id !== "343129897360949248") return;
-    if (newState.channel.id !== "834808680972025906") return;
-    let membersChannel = newState.guild.channels.cache.get("820042009263472680")
+    if (newState.channel.id !== "857541825312325632") return;
+    let membersChannel = newState.guild.channels.cache.get("742495313981604020")
     newState.member.voice.setChannel(membersChannel, 'Moved '+ newState.member.user.tag +' into the channel '+ membersChannel.name +' by nick did it')
 })
+
 client.on('clickButton', async (button) => {
     let message = button.message
     let user = button.clicker.user
