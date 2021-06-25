@@ -43,7 +43,7 @@ client.on('message', async (message) => {
         let i = 0;
         let words = config.discord.lfg_dont_purge
         for (const word of words) {
-            if (!message.content.includes(word)) {
+            if (!message.content.toLowerCase().includes(word)) {
                 i += 1
             }
         }
