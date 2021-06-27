@@ -143,9 +143,9 @@ let dungeon_xp = [
 ]
 
 function getDungeonLevel(xp) {
-    var level = 0
-    var percentage = 0.0
-    for (var i = 0; i < dungeon_xp.length; i++) {
+    let level = 0
+    let percentage = 0.0
+    for (let i = 0; i < dungeon_xp.length; i++) {
         if (dungeon_xp[i][1] > xp) {
             level = dungeon_xp[i][0]
             a = xp - dungeon_xp[i - 1][1]
@@ -179,7 +179,7 @@ globalThis.getCataAndPb = async function (uuid) {
         F0: { s: 'No PB Found', sPlus: 'No PB Found' },
         M0: { s: 'No PB Found', sPlus: 'No PB Found' },
         F1: { s: 'No PB Found', sPlus: 'No PB Found' },
-        M1: { s: 'No PB Found', sPlus: 'No PB Found7' },
+        M1: { s: 'No PB Found', sPlus: 'No PB Found' },
         F2: { s: 'No PB Found', sPlus: 'No PB Found' },
         M2: { s: 'No PB Found', sPlus: 'No PB Found' },
         F3: { s: 'No PB Found', sPlus: 'No PB Found' },
@@ -194,8 +194,20 @@ globalThis.getCataAndPb = async function (uuid) {
         M7: { s: 'No PB Found', sPlus: 'No PB Found' }
     }
     let cataLevel = getDungeonLevel(highestCataXp)
+    let progress
+    for (let j = 0; j < dungeon_xp.length; j++) {
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        if (dungeon_xp[j][1] > highestCataXp) {
+            progress = numberWithCommas(highestCataXp.toFixed(0))+'/'+numberWithCommas(dungeon_xp[j][1])
+            break;
+        }
+
+    }
     let dataJSON = {
-        cataLevel: cataLevel.toFixed(2)
+        cataLevel: cataLevel.toFixed(2),
+        progress
     }
     for (let i = 0; i <= 7; i++) {
         dataJSON["F" + i.toString()] = { "s": "No PB Found", "sPlus": "No PB Found" }

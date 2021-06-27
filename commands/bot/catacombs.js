@@ -108,7 +108,7 @@ module.exports = {
                     "fields": [
                         {
                             "name": "**Catacombs Level**",
-                            "value": `${catacombs}`
+                            "value": `${catacombs} [${data.progress}]`
                         },
                         {
                             "name": "**Secrets**",
