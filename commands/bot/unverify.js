@@ -16,7 +16,7 @@ module.exports = {
         if(!message.mentions.members.first()){
             return message.channel.send(createErrorEmbed('Please mention a valid user!'))
         }
-        if (message.mentions.members.first().roles.has(config.discord.staff_role)) {
+        if (message.mentions.members.first().roles.cache.has(config.discord.staff_role)) {
             return message.channel.send(createErrorEmbed('You can\'t unverify a staff member!'))
         }
         message.mentions.members.first().roles.remove(message.mentions.members.first().roles.cache)
