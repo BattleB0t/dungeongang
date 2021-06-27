@@ -129,7 +129,17 @@ let dungeon_xp = [
     [48, 360559640],
     [49, 453559640],
     [50, 569809640],
-    [51, 1000000000000]
+    [51, 708815308],
+    [52, 878166305],
+    [53, 1083705521],
+    [54, 1332256501],
+    [55, 1631764764],
+    [56, 1991456278],
+    [57, 2422014775],
+    [58, 2935779757],
+    [59, 3546967162],
+    [60, 4271914829],
+    [61, 1000000000000]
 ]
 
 function getDungeonLevel(xp) {
@@ -147,6 +157,7 @@ function getDungeonLevel(xp) {
     }
     return level + percentage - 1;
 }
+
 globalThis.getCataAndPb = async function (uuid) {
     let response = await HypixelApiRequest(`https://api.hypixel.net/skyblock/profiles?key=${config.minecraft.apiKey}&uuid=${uuid}`)
     if (response === "Api throttle") { return response; }
