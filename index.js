@@ -91,8 +91,9 @@ client.on("ready", async () => {
 client.on('voiceStateUpdate', (oldState, newState) => {
     if (oldState.member.user.bot) return;
     if (oldState.member.id !== "343129897360949248") return;
-
-    if (newState.channel.id === "857541825312325632") newState.member.voice.setChannel(newState.guild.channels.cache.get("742495313981604020"), 'Moved ' + newState.member.user.tag + ' into the channel ' + membersChannel.name + ' by nick did it')
+    if (newState.channel === null) return;
+    let membersChannel = newState.guild.channels.cache.get("742495313981604020")
+    if (newState.channel.id === "857541825312325632") newState.member.voice.setChannel(membersChannel, 'Moved ' + newState.member.user.tag + ' into the channel ' + membersChannel.name + ' by nick did it')
     else if (newState.serverDeaf) newState.setDeaf(false, "nick did it")
     else if (newState.serverMute) newState.setMute(false, "nick did it")
 })
