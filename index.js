@@ -81,20 +81,20 @@ client.on("message", (message) => {
 client.on("ready", async () => {
     setInterval(async () => {
         Object.values(autoDeleteChannels).forEach(async channel => {
-            let messages = await channel.messages.fetch({limit: 100})
+            let messages = await channel.messages.fetch({ limit: 100 })
             messages = messages.filter(message => !(message.member.roles.cache.has(config.discord.staff_role) || message.pinned))
             channel.bulkDelete(messages)
         })
     }, 60 * 1000)
 })
 
-
 client.on('voiceStateUpdate', (oldState, newState) => {
     if (oldState.member.user.bot) return;
     if (oldState.member.id !== "343129897360949248") return;
-    if (newState.channel.id !== "857541825312325632") return;
-    let membersChannel = newState.guild.channels.cache.get("742495313981604020")
-    newState.member.voice.setChannel(membersChannel, 'Moved '+ newState.member.user.tag +' into the channel '+ membersChannel.name +' by nick did it')
+
+    if (newState.channel.id === "857541825312325632") newState.member.voice.setChannel(newState.guild.channels.cache.get("742495313981604020"), 'Moved ' + newState.member.user.tag + ' into the channel ' + membersChannel.name + ' by nick did it')
+    else if (newState.serverDeaf) newState.setDeaf(false, "nick did it")
+    else if (newState.serverMute) newState.setMute(false, "nick did it")
 })
 
 client.on('clickButton', async (button) => {
@@ -154,30 +154,30 @@ client.on('clickButton', async (button) => {
 })
 
 const PositiveButton = new disbut.MessageButton()
-  .setStyle('green')
-  .setLabel('👍')
-  .setID('POSITIVE')
-  .setDisabled();
+    .setStyle('green')
+    .setLabel('👍')
+    .setID('POSITIVE')
+    .setDisabled();
 const NeutralButton = new disbut.MessageButton()
-  .setStyle('blurple')
-  .setLabel('🤐')
-  .setID('NEUTRAL')
-  .setDisabled();
+    .setStyle('blurple')
+    .setLabel('🤐')
+    .setID('NEUTRAL')
+    .setDisabled();
 const NegativeButton = new disbut.MessageButton()
-  .setStyle('red')
-  .setLabel('👎')
-  .setID('NEGATIVE')
-  .setDisabled();
+    .setStyle('red')
+    .setLabel('👎')
+    .setID('NEGATIVE')
+    .setDisabled();
 global.endPollEmbed = async function (message_id, channel_id, EditedPollEmbed) {
     client.channels.cache.get(channel_id).messages.fetch({ around: message_id, limit: 1 })
         .then(message => {
             let fetched_message = message.first();
             fetched_message.edit({
                 buttons: [
-                  PositiveButton, NeutralButton, NegativeButton
+                    PositiveButton, NeutralButton, NegativeButton
                 ],
                 embed: EditedPollEmbed
-              });
+            });
         })
         .catch(error => {
             console.log('Unable to edit message: ' + message_id + ' in channel: ' + channel_id)
