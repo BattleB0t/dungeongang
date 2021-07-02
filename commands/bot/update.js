@@ -38,6 +38,9 @@ module.exports = {
                 if (uuid == 'invalid player') {
                     return message.editError('This player does not exist!')
                 }
+                if (JSON.parse(fs.readFileSync('./data/banned.json')).users.includes(uuid)) {
+                    return message.editError('You are banned from verifying!')
+                }
                 username = await getIGN(uuid)
                 let data = await getSecretCountCataDiscord(uuid)
                     .catch(error => {
