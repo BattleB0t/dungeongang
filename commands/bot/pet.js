@@ -11,6 +11,10 @@ module.exports = {
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
 
+        let member = message.member
+        if (message.mentions.members.first())
+            member = message.mentions.members.first()
+
         const petGifCache = []
 
         const options = {
@@ -29,7 +33,7 @@ module.exports = {
         const canvas = Canvas.createCanvas(options.resolution, options.resolution)
         const ctx = canvas.getContext('2d')
 
-        const avatar = await Canvas.loadImage(`https://cdn.discordapp.com/avatars/${message.member.id}/${message.member.user.avatar}.png`)
+        const avatar = await Canvas.loadImage(`https://cdn.discordapp.com/avatars/${member.id}/${member.user.avatar}.png`)
 
         for (let i = 0; i < 10; i++) {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -46,7 +50,7 @@ module.exports = {
             const offsetX = (1 - width) * 0.5 + 0.1
             const offsetY = (1 - height) - 0.08
 
-            if (i == petGifCache.length) petGifCache.push(await Canvas.loadImage(path.resolve(__dirname, `img/pet${i}.gif`)))
+            if (i == petGifCache.length) petGifCache.push(await Canvas.loadImage(fs.readFileSync(`./data/petImage/pet${i}.gif`)))
 
             ctx.drawImage(avatar, options.resolution * offsetX, options.resolution * offsetY, options.resolution * width, options.resolution * height)
             ctx.drawImage(petGifCache[i], 0, 0, options.resolution, options.resolution)
@@ -58,7 +62,7 @@ module.exports = {
 
         let gif = encoder.out.getData()
         fs.writeFileSync("petpet.gif", gif)
-        message.channel.send("test", new Discord.MessageAttachment("petpet.gif"));
+        message.channel.send(`<@${message.member.id}>`, new Discord.MessageAttachment("petpet.gif"));
         fs.unlinkSync("petpet.gif")
     }
 }
