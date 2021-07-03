@@ -18,7 +18,7 @@ module.exports = {
         const petGifCache = []
 
         const options = {
-            resolution: 128,
+            resolution: 192,
             delay: 20,
             backgroundColor: null,
         }
@@ -61,8 +61,8 @@ module.exports = {
         encoder.finish()
 
         let gif = encoder.out.getData()
-        fs.writeFileSync("petpet.gif", gif)
-        message.channel.send(`<@${message.member.id}>`, new Discord.MessageAttachment("petpet.gif"));
-        fs.unlinkSync("petpet.gif")
+        fs.writeFileSync(`./data/petImage/${member.id}petpet.gif`, gif)
+        await message.channel.send(`<@${message.member.id}>`, new Discord.MessageAttachment(`data/petImage/${member.id}petpet.gif`));
+        fs.unlinkSync(`./data/petImage/${member.id}petpet.gif`)
     }
 }
