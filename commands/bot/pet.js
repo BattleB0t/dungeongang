@@ -1,6 +1,5 @@
 const Discord = require('discord.js')
-const path = require('path')
-const _ = require('lodash')
+const axios = require('axios')
 const GIFEncoder = require('gifencoder')
 const Canvas = require('canvas')
 module.exports = {
@@ -11,10 +10,15 @@ module.exports = {
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
 
-        let member = message.member
+        let avatarLink = `https://cdn.discordapp.com/avatars/${message.member.id}/${message.member.user.avatar}.png`
         if (message.mentions.members.first())
-            member = message.mentions.members.first()
-
+            avatarLink = `https://cdn.discordapp.com/avatars/${message.mentions.members.first().id}/${message.mentions.members.first().user.avatar}.png`
+        else if (args[1]) {
+            let uuid = await getUUID(args[1])
+            if (uuid !== 'invalid player') {
+                avatarLink = `https://crafatar.com/renders/head/${uuid}?size=512&overlay`
+            }
+        }
         const petGifCache = []
 
         const options = {
@@ -33,7 +37,7 @@ module.exports = {
         const canvas = Canvas.createCanvas(options.resolution, options.resolution)
         const ctx = canvas.getContext('2d')
 
-        const avatar = await Canvas.loadImage(`https://cdn.discordapp.com/avatars/${member.id}/${member.user.avatar}.png`)
+        const avatar = await Canvas.loadImage(avatarLink)
 
         for (let i = 0; i < 10; i++) {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -61,8 +65,8 @@ module.exports = {
         encoder.finish()
 
         let gif = encoder.out.getData()
-        fs.writeFileSync(`./data/petImage/${member.id}petpet.gif`, gif)
-        await message.channel.send(`<@${message.member.id}>`, new Discord.MessageAttachment(`data/petImage/${member.id}petpet.gif`));
-        fs.unlinkSync(`./data/petImage/${member.id}petpet.gif`)
+        fs.writeFileSync(`./data/petImage/${message.member.id}petpet.gif`, gif)
+        await message.channel.send(`<@${message.member.id}>`, new Discord.MessageAttachment(`data/petImage/${message.member.id}petpet.gif`));
+        fs.unlinkSync(`./data/petImage/${message.member.id}petpet.gif`)
     }
 }
