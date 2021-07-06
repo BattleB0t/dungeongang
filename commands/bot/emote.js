@@ -8,7 +8,7 @@ module.exports = {
     aliases: [],
     usage: 'emote give/take/list [@user] [emote]',
     description: '(admin+ only)',
-    hidden: false,
+    hidden: true,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if (!message.member.isOwner()) {

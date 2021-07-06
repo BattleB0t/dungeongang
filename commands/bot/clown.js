@@ -7,7 +7,7 @@ module.exports = {
   aliases: [],
   usage: "clown add/remove [username]",
   description: "Adds/removes a user from the clown list",
-  hidden: false,
+  hidden: true,
   async execute() {
     let message = messageParam,
       args = argsParam,

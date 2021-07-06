@@ -5,7 +5,7 @@ module.exports = {
     aliases: [],
     usage: 'unverify <@person>',
     description: 'unverifies a person (admin+ only)',
-    hidden: false,
+    hidden: true,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if (!message.member.isOwner()) {
