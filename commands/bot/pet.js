@@ -7,6 +7,7 @@ module.exports = {
     aliases: [],
     usage: 'pet [user]',
     description: 'Creates the pet gif using the user\'s avatar',
+    hidden: false,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
 

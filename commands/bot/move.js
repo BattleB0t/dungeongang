@@ -3,6 +3,7 @@ module.exports = {
     aliases: ['m'],
     usage: 'move [user]',
     description: 'moves a user to your current voice channel',
+    hidden: false,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if (args[2] === 'to' && message.mentions.channels.first() && message.member.roles.cache.has(config.discord.staff_role)) {

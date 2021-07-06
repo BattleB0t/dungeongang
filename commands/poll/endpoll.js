@@ -5,6 +5,7 @@ module.exports = {
     aliases: ['ep'],
     usage: 'endpoll [poll message id]',
     description: 'Ends an active poll',
+    hidden: false,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if(!message.member.roles.cache.has(config.discord.poll_creation_role)){

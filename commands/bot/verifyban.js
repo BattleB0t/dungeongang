@@ -7,7 +7,8 @@ module.exports = {
   aliases: [],
   usage: "verifyban add/remove [username]",
   description: "Adds/removes a user from the verifyban list",
-  async execute() {
+    hidden: false,
+    async execute() {
     let message = messageParam,
       args = argsParam,
       config = configParam,

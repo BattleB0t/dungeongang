@@ -6,6 +6,7 @@ module.exports = {
     aliases: [],
     usage: 'verify [username]',
     description: 'Verifies and links your minecraft account to your discord account',
+    hidden: false,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if (message.channel.id !== config.discord.verification_channel && message.channel.id !== config.discord.staff_commands) { return; }

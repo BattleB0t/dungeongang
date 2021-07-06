@@ -3,6 +3,7 @@ module.exports = {
     aliases: [],
     usage: 'emotes',
     description: 'See the emojis that a you have',
+    hidden: false,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         let verified = JSON.parse(fs.readFileSync('./data/verified.json'))

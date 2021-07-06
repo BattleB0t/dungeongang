@@ -10,6 +10,7 @@ module.exports = {
     aliases: ['h', 'info', `commands`],
     usage: 'help [command]',
     description: 'Gets information about the bot',
+    hidden: false,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         // console.log(args)
@@ -28,12 +29,14 @@ module.exports = {
                 const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
                 for (const file of commandFiles) {
                     const command = require(`../${folder}/${file}`);
-                    let currentCommand = [];
-                    currentCommand.push(`\`${command.name}\``);
-                    currentCommand.push('-');
-                    currentCommand.push(command.description);
-                    descriptions.push(currentCommand.join(' '));
-                    commandsNum++;
+                    if (!command.hidden) {
+                        let currentCommand = [];
+                        currentCommand.push(`\`${command.name}\``);
+                        currentCommand.push('-');
+                        currentCommand.push(command.description);
+                        descriptions.push(currentCommand.join(' '));
+                        commandsNum++;
+                    }
                 }
                 embed.addField((folder.charAt(0).toUpperCase() + folder.slice(1)), descriptions.join('\n'))
             }

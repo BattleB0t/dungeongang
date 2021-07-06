@@ -3,6 +3,7 @@ module.exports = {
     aliases: [],
     usage: 'equip [emote] [slot]',
     description: 'Equips an emoji in the specified slot',
+    hidden: false,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if(!args[1] || !args[2]){

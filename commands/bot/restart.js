@@ -4,6 +4,7 @@ module.exports = {
     aliases: [],
     usage: '-restart',
     description: '(bot owner only)',
+    hidden: false,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if (isInRestart) return;

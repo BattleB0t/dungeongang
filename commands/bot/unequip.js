@@ -3,6 +3,7 @@ module.exports = {
     aliases: [],
     usage: 'unequip [all/slot]',
     description: 'Unequips your emotes',
+    hidden: false,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if(!args[1]){

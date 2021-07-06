@@ -17,43 +17,44 @@ module.exports = {
   aliases: [],
   usage: 'poll [username]',
   description: 'Creates a poll for the specified user',
+  hidden: false,
   async execute() {
     let message = messageParam, args = argsParam, config = configParam, fs = fsParam
     let polls = JSON.parse(fs.readFileSync('./data/polled_users.json'))
-    if(!message.member.roles.cache.has(config.discord.poll_creation_role)){
-        return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
+    if (!message.member.roles.cache.has(config.discord.poll_creation_role)) {
+      return message.channel.send(createErrorEmbed('You do not have permission to use this command!'))
     }
-    if(!args[1]){
-        return message.channel.send(createErrorEmbed('No username provided.'))
+    if (!args[1]) {
+      return message.channel.send(createErrorEmbed('No username provided.'))
     }
     let username = args[1]
     let uuid = await getUUID(username)
-    if(uuid == 'invalid player'){
-        return message.channel.send(createErrorEmbed('This player does not exist!'))
+    if (uuid == 'invalid player') {
+      return message.channel.send(createErrorEmbed('This player does not exist!'))
     }
     let IGN = await getIGN(uuid)
-    if(IGN == 'invalid uuid'){
-        return message.channel.send(createErrorEmbed('An error has occurred while making the poll, please try again later.'))
+    if (IGN == 'invalid uuid') {
+      return message.channel.send(createErrorEmbed('An error has occurred while making the poll, please try again later.'))
     }
     let data = await getCataAndPb(uuid)
-    .catch(error => {
-      if(!error.isAxiosError) {
-        message.edit(createErrorEmbed(error))
-        throw error
-    }
-    console.log('axios error')
-    message.edit(createErrorEmbed(`(**${error.response.status}**) ${error.response.statusText}`))
-    throw error
-    })
-    let secrets = await getSecretCountCataDiscord(uuid)
       .catch(error => {
-        if(!error.isAxiosError) {
+        if (!error.isAxiosError) {
           message.edit(createErrorEmbed(error))
           throw error
-      }
-      console.log('axios error')
-      message.edit(createErrorEmbed(`(**${error.response.status}**) ${error.response.statusText}`))
-      throw error
+        }
+        console.log('axios error')
+        message.edit(createErrorEmbed(`(**${error.response.status}**) ${error.response.statusText}`))
+        throw error
+      })
+    let secrets = await getSecretCountCataDiscord(uuid)
+      .catch(error => {
+        if (!error.isAxiosError) {
+          message.edit(createErrorEmbed(error))
+          throw error
+        }
+        console.log('axios error')
+        message.edit(createErrorEmbed(`(**${error.response.status}**) ${error.response.statusText}`))
+        throw error
       })
     uuid = uuid.substr(0, 8) + "-" + uuid.substr(8, 4) + "-" + uuid.substr(12, 4) + "-" + uuid.substr(16, 4) + "-" + uuid.substr(20)
     if (data === "Api throttle") { return message.channel.send(createErrorEmbed("API Throttle: Please try again later.")) }
@@ -62,114 +63,114 @@ module.exports = {
     let master6 = data['M6']['sPlus']
     let floor7 = data['F7']['sPlus']
     let secretsFound = secrets.secretCount
-    if(!isNaN(floor7)) floor7 = fmtMStoMSS(floor7)
-    if(!isNaN(master6)) master6 = fmtMStoMSS(master6)
+    if (!isNaN(floor7)) floor7 = fmtMStoMSS(floor7)
+    if (!isNaN(master6)) master6 = fmtMStoMSS(master6)
     let pollEndDate = new Date();
     let poll_id = 0
-    if(polls.uuids.some(item => item[uuid])){
-        function getIndex(uuids){
-          for(let i = 0; i < uuids.length; i++){
-            if(Object.keys(uuids[i])[0] === uuid){
+    if (polls.uuids.some(item => item[uuid])) {
+      function getIndex(uuids) {
+        for (let i = 0; i < uuids.length; i++) {
+          if (Object.keys(uuids[i])[0] === uuid) {
             return i
           }
         }
       }
-        poll_id = Object.keys(polls.uuids[getIndex(polls.uuids)][uuid]).length
+      poll_id = Object.keys(polls.uuids[getIndex(polls.uuids)][uuid]).length
     }
-    pollEndDate.setHours( pollEndDate.getHours() + 6 );
+    pollEndDate.setHours(pollEndDate.getHours() + 6);
     const PollEmbed = {
-        "color": 5675786,
-        "footer": {
-          "icon_url": "https://i.imgur.com/Y3WmAbV.png",
-          "text": "Dungeon Gang Polls"
+      "color": 5675786,
+      "footer": {
+        "icon_url": "https://i.imgur.com/Y3WmAbV.png",
+        "text": "Dungeon Gang Polls"
+      },
+      "thumbnail": {
+        "url": "https://i.imgur.com/Y3WmAbV.png"
+      },
+      "author": {
+        "name": "➤ " + IGN,
+        "icon_url": "https://mc-heads.net/avatar/" + uuid,
+        "url": "https://sky.shiiyu.moe/stats/" + IGN
+      },
+      "fields": [
+        {
+          "name": "**Catacombs Level**",
+          "value": catacombs,
+          "inline": true
         },
-        "thumbnail": {
-          "url": "https://i.imgur.com/Y3WmAbV.png"
+        {
+          "name": "**Floor 7 S+ PB**",
+          "value": floor7,
+          "inline": true
         },
-        "author": {
-          "name": "➤ "+ IGN,
-          "icon_url": "https://mc-heads.net/avatar/"+ uuid,
-          "url": "https://sky.shiiyu.moe/stats/"+ IGN
+        {
+          "name": "**Master 6 S+ PB**",
+          "value": master6,
+          "inline": true
         },
-        "fields": [
-          {
-            "name": "**Catacombs Level**",
-            "value": catacombs,
-            "inline": true
-          },
-          {
-            "name": "**Floor 7 S+ PB**",
-            "value": floor7,
-            "inline": true
-          },
-          {
-            "name": "**Master 6 S+ PB**",
-            "value": master6,
-            "inline": true
-          },
-          {
-            "name": "**Secrets**",
-            "value": secretsFound,
-            "inline": true
-          },
-          {
-            "name": ":thumbsup: :zipper_mouth: :thumbsdown:",
-            "value": "Please be honest when voting, these polls are held to measure someone's skill. Not their popularity or personalities",
-            "inline": false
-          },
-          {
-            "name": "**Anonymous**",
-            "value": "True",
-            "inline": true
-          },
-          {
-            "name": "**Poll End Time**",
-            "value": pollEndDate.toLocaleString(),
-            "inline": true
-          }
-        ]
-      };
-      message.channel.send(createSuccessEmbed(`Poll for ${IGN} sent in <#${config.discord.poll_channel}>!`))
-      return message.client.channels.cache.get(config.discord.poll_channel).send({
-        buttons: [
-          PositiveButton, NeutralButton, NegativeButton
-        ],
-        embed: PollEmbed
-      })
-      .then(message => {
-          let pollJson = {
-            "poll_id": poll_id,
-            "username": IGN,
-            "poll_message_id": message.id,
-            "poll_channel_id": message.channel.id,
-            "votes_positive": [],
-            "votes_neutral": [],
-            "votes_negative": [],
-            "uuid": uuid,
-            "personal_best": floor7,
-            "m6_best": master6,
-            "catacombs_level": catacombs,
-            "secrets": secretsFound,
-            "poll_end_date": pollEndDate,
-            "active": true
+        {
+          "name": "**Secrets**",
+          "value": secretsFound,
+          "inline": true
+        },
+        {
+          "name": ":thumbsup: :zipper_mouth: :thumbsdown:",
+          "value": "Please be honest when voting, these polls are held to measure someone's skill. Not their popularity or personalities",
+          "inline": false
+        },
+        {
+          "name": "**Anonymous**",
+          "value": "True",
+          "inline": true
+        },
+        {
+          "name": "**Poll End Time**",
+          "value": pollEndDate.toLocaleString(),
+          "inline": true
         }
-          if(poll_id == 0){
-              let player_info = {
-                  [uuid]: []
-              }
-              console.log('ID: '+ poll_id)
-              player_info[uuid].push(pollJson)
-              polls.uuids.push(player_info)
-          }else{
-              console.log('ID: '+ poll_id)
-              polls.uuids[getIndex(polls.uuids)][uuid].push(pollJson)
+      ]
+    };
+    message.channel.send(createSuccessEmbed(`Poll for ${IGN} sent in <#${config.discord.poll_channel}>!`))
+    return message.client.channels.cache.get(config.discord.poll_channel).send({
+      buttons: [
+        PositiveButton, NeutralButton, NegativeButton
+      ],
+      embed: PollEmbed
+    })
+      .then(message => {
+        let pollJson = {
+          "poll_id": poll_id,
+          "username": IGN,
+          "poll_message_id": message.id,
+          "poll_channel_id": message.channel.id,
+          "votes_positive": [],
+          "votes_neutral": [],
+          "votes_negative": [],
+          "uuid": uuid,
+          "personal_best": floor7,
+          "m6_best": master6,
+          "catacombs_level": catacombs,
+          "secrets": secretsFound,
+          "poll_end_date": pollEndDate,
+          "active": true
+        }
+        if (poll_id == 0) {
+          let player_info = {
+            [uuid]: []
           }
-          polls.active_polls.push(message.id)
-          let json_data = JSON.stringify(polls, null, 2)
-          fs.writeFileSync('./data/polled_users.json', json_data)
+          console.log('ID: ' + poll_id)
+          player_info[uuid].push(pollJson)
+          polls.uuids.push(player_info)
+        } else {
+          console.log('ID: ' + poll_id)
+          polls.uuids[getIndex(polls.uuids)][uuid].push(pollJson)
+        }
+        polls.active_polls.push(message.id)
+        let json_data = JSON.stringify(polls, null, 2)
+        fs.writeFileSync('./data/polled_users.json', json_data)
       }).catch(error => {
         console.log(error)
         message.channel.send(createErrorEmbed('Unable to create poll. Please contact nick#0404 for assistance.'))
       })
-    },
+  },
 };

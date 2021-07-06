@@ -5,6 +5,7 @@ module.exports = {
     aliases: ['cata', 'c', 'check', 'dungeons', 'd'],
     usage: 'check [username]',
     description: 'Command to check if a player meets top player/top player+ requirements',
+    hidden: false,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         let username;

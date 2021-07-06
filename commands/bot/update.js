@@ -5,6 +5,7 @@ module.exports = {
     aliases: [],
     usage: 'update [username]',
     description: 'Updates your catacombs level and emotes',
+    hidden: false,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if (message.channel.id !== config.discord.update_channel && message.channel.id !== config.discord.staff_commands) { return; }

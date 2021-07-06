@@ -5,6 +5,7 @@ module.exports = {
     aliases: [],
     usage: 'forceupdate <@person> [username]',
     description: 'Force updates a person\'s catacombs level and emotes (staff only)',
+    hidden: false,
     async execute() {
         let message = messageParam, args = argsParam, config = configParam, fs = fsParam
         if (!message.member.roles.cache.has(config.discord.staff_role)) {
